@@ -1,0 +1,44 @@
+version: 2
+
+updates:
+  # Also keeps the commit-SHA pins in .github/workflows current.
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    cooldown:
+      default-days: 7
+    commit-message:
+      prefix: ci
+    groups:
+      actions:
+        patterns: ["*"]
+
+  - package-ecosystem: nuget
+    directories:
+      - /src/WigiPanel
+      - /tests/WigiPanel.Tests
+      - /tools/Preview
+      - /stubs/WigiDashWidgetFramework
+    schedule:
+      interval: weekly
+    cooldown:
+      default-days: 7
+    commit-message:
+      prefix: chore
+    groups:
+      nuget:
+        patterns: ["*"]
+
+  # Release tooling only (semantic-release).
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    cooldown:
+      default-days: 7
+    commit-message:
+      prefix: chore
+    groups:
+      npm:
+        patterns: ["*"]
