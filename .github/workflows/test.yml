@@ -40,6 +40,7 @@ jobs:
       - name: Check generated skins are up to date
         run: |
           ./designs/make-designs.ps1
-          git diff --exit-code -- layouts/
-          if ($LASTEXITCODE) { throw 'layouts/ is out of date: run designs/make-designs.ps1 and commit the result.' }
+          # status, not diff: also catches a new skin whose generated JSON was never committed.
+          $changes = git status --porcelain -- layouts/
+          if ($changes) { $changes; throw 'layouts/ is out of date: run designs/make-designs.ps1 and commit the result.' }
         shell: pwsh

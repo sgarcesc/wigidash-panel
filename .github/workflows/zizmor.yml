@@ -20,4 +20,7 @@ jobs:
         with:
           persist-credentials: false
 
+      # Fork PRs get a read-only token, so the SARIF upload would fail; print findings instead.
       - uses: zizmorcore/zizmor-action@45d7276c9ca790aabd705e31ca99c6185c3e76dd # v0.8.1
+        with:
+          advanced-security: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
