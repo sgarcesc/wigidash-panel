@@ -1,0 +1,7 @@
+<Project>
+  <PropertyGroup>
+    <!-- net472 projects default to auditing direct packages only; also report vulnerable transitive ones. -->
+    <NuGetAudit>true</NuGetAudit>
+    <NuGetAuditMode>all</NuGetAuditMode>
+  </PropertyGroup>
+</Project>

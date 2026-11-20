@@ -4,22 +4,28 @@ on:
   pull_request:
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   test:
     # The widget targets net472 and uses WPF/System.Drawing, so build on Windows.
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
-      - uses: actions/setup-dotnet@v6
+      - uses: actions/setup-dotnet@0f4a354dd5547a28c70b7853dbd95d5b67886e73 # v6.1.0
         with:
           dotnet-version: 10.0.x
 
       # Builds against stubs/WigiDashWidgetFramework, since WigiDash Manager isn't installed here.
       - run: dotnet test tests/WigiPanel.Tests -c Release
 
-      # Compile the installer too, so a broken installer/wigidash-panel.iss fails here instead of
-      # in the release job after merge. package.ps1 fails in CI if ISCC.exe is missing.
+      # Same build, preview render, staging and installer the release runs, so packaging breaks
+      # (including installer/wigidash-panel.iss) fail here instead of in the release job after
+      # merge. package.ps1 fails in CI if ISCC.exe is missing.
       - name: Ensure Inno Setup 6
         shell: pwsh
         run: |
@@ -28,3 +34,12 @@ jobs:
           }
 
       - run: pwsh -NoProfile -File scripts/package.ps1 -Version 0.0.0 -Installer
+
+      # The native skins in layouts/ are generated; fail if they were hand-edited or the script
+      # was changed without re-running it.
+      - name: Check generated skins are up to date
+        run: |
+          ./designs/make-designs.ps1
+          git diff --exit-code -- layouts/
+          if ($LASTEXITCODE) { throw 'layouts/ is out of date: run designs/make-designs.ps1 and commit the result.' }
+        shell: pwsh
