@@ -14,7 +14,8 @@
       "@semantic-release/github",
       {
         "assets": [{ "path": "dist/*.zip" }, { "path": "dist/*.exe" }],
-        "draftRelease": true
+        "draftRelease": true,
+        "successComment": ":tada: This ${issue.pull_request ? 'PR is included' : 'issue has been resolved'} in version ${nextRelease.version} :tada:\n\nThe release is available on [GitHub release](https://github.com/sgarcesc/wigidash-panel/releases/tag/${nextRelease.gitTag})"
       }
     ]
   ]

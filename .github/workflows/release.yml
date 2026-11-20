@@ -118,4 +118,10 @@ jobs:
           provenance="wigidash-panel-$TAG.intoto.jsonl"
           jq -c . "$BUNDLE" > "$provenance"
           gh release upload "$TAG" "$provenance" --repo "$GITHUB_REPOSITORY" --clobber
-          gh release edit "$TAG" --repo "$GITHUB_REPOSITORY" --draft=false --latest
+          # Latest only if this is the highest version: re-publishing a stuck older draft must not
+          # take Latest from a newer release (README links releases/latest).
+          highest=$( { gh release list --repo "$GITHUB_REPOSITORY" --exclude-drafts --limit 1000 --json tagName --jq '.[].tagName'; echo "$TAG"; } \
+            | grep -E '^[0-9]+\.[0-9]+\.[0-9]+$' | sort -V | tail -n 1)
+          latest=$([[ "$highest" == "$TAG" ]] && echo true || echo false)
+          echo "Publishing $TAG (latest=$latest, highest published or current: $highest)"
+          gh release edit "$TAG" --repo "$GITHUB_REPOSITORY" --draft=false --latest="$latest"
