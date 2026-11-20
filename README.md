@@ -51,7 +51,10 @@ gh attestation verify wigidash-panel-setup-X.Y.Z.exe -R sgarcesc/wigidash-panel 
   --signer-workflow sgarcesc/wigidash-panel/.github/workflows/release.yml
 ```
 
-The same command works for the zip. Releases made before attestations were added have none.
+The same command works for the zip. Releases from now on also carry the provenance as
+`wigidash-panel-X.Y.Z.intoto.jsonl`; download it too and add `--bundle wigidash-panel-X.Y.Z.intoto.jsonl`
+to verify without looking the attestation up on GitHub. Releases made before attestations were added
+have none.
 
 <details>
 <summary>Alternative: the zip and <code>install.ps1</code></summary>
@@ -104,9 +107,11 @@ Releases are cut automatically by [semantic-release](https://github.com/semantic
 patch release, `feat:` a minor one and a `BREAKING CHANGE:` footer a major one. Other types
 (`chore:`, `docs:`, ...) don't trigger a release. Versions are plain `X.Y.Z`, with no `v` prefix.
 
-After a release is published, the workflow's `attest` job downloads its zip and installer and
-attaches signed build provenance. If that job fails, re-run it alone from the workflow run. To
-attest an existing release by hand, run the workflow with the release's tag:
+Releases are immutable once published, so semantic-release creates each one as a draft. The
+workflow's `attest` job then downloads the draft's zip and installer, creates signed build
+provenance, attaches it as `wigidash-panel-X.Y.Z.intoto.jsonl` and publishes the release. If that
+job fails, the release stays a draft: re-run the job alone from the workflow run. To attest an
+already-published release by hand (attestation only, since it can't take new files), run
 `gh workflow run release.yml -f attest-tag=X.Y.Z`.
 
 ## Editing the layout

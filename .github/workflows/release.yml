@@ -80,11 +80,12 @@ jobs:
       (inputs.attest-tag != '' || (needs.release.result == 'success' && needs.release.outputs.tag != ''))
     runs-on: ubuntu-latest
     permissions:
-      contents: read     # download the release assets
+      contents: write    # download the draft's assets, attach the provenance file, publish the draft
       id-token: write    # Sigstore signing certificate
       attestations: write
     steps:
       - name: Download release files
+        id: release
         env:
           GH_TOKEN: ${{ github.token }}
           TAG: ${{ inputs.attest-tag || needs.release.outputs.tag }}
@@ -92,9 +93,35 @@ jobs:
           [[ "$TAG" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]] || { echo "Not a release tag: $TAG"; exit 1; }
           gh release download "$TAG" --repo "$GITHUB_REPOSITORY" --dir dist --pattern '*.zip' --pattern '*.exe'
           ls -l dist
+          echo "draft=$(gh release view "$TAG" --repo "$GITHUB_REPOSITORY" --json isDraft --jq .isDraft)" >> "$GITHUB_OUTPUT"
 
-      - uses: actions/attest@1e69f48acb82d1966a394da916b4c1698aa569d6 # v4.2.2
+      - id: attest
+        uses: actions/attest@1e69f48acb82d1966a394da916b4c1698aa569d6 # v4.2.2
         with:
           subject-path: |
             dist/*.zip
             dist/*.exe
+
+      # semantic-release creates the release as a draft (draftRelease in .releaserc.json) because
+      # releases are immutable once published. Attach the provenance as <name>.intoto.jsonl (one
+      # Sigstore bundle per line, the format `gh attestation download` writes and
+      # `gh attestation verify --bundle` reads), then publish. If anything above fails, the release
+      # stays an unpublished draft and this job can be re-run. Already-published releases (manual
+      # attest-tag runs) can't take new assets, so they only get the attestation.
+      - name: Attach provenance and publish
+        if: steps.release.outputs.draft == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ inputs.attest-tag || needs.release.outputs.tag }}
+          BUNDLE: ${{ steps.attest.outputs.bundle-path }}
+        run: |
+          provenance="wigidash-panel-$TAG.intoto.jsonl"
+          jq -c . "$BUNDLE" > "$provenance"
+          gh release upload "$TAG" "$provenance" --repo "$GITHUB_REPOSITORY" --clobber
+          # Latest only if this is the highest version: re-publishing a stuck older draft must not
+          # take Latest from a newer release (README links releases/latest).
+          highest=$( { gh release list --repo "$GITHUB_REPOSITORY" --exclude-drafts --limit 1000 --json tagName --jq '.[].tagName'; echo "$TAG"; } \
+            | grep -E '^[0-9]+\.[0-9]+\.[0-9]+$' | sort -V | tail -n 1)
+          latest=$([[ "$highest" == "$TAG" ]] && echo true || echo false)
+          echo "Publishing $TAG (latest=$latest, highest published or current: $highest)"
+          gh release edit "$TAG" --repo "$GITHUB_REPOSITORY" --draft=false --latest="$latest"
