@@ -1,0 +1,118 @@
+{
+  // Maps AIDA64 SensorPanel / WigiDash LCD item IDs to sensors this widget can read, so
+  // .gslcd and .sensorpanel skins render with live data.
+  //
+  // Each entry is either
+  //   { "sensor": <binding>, "format": "0.00" }   numeric value (bars, gauges, graphs, text)
+  //   { "text": "template" }                       text-only value built from {tokens}
+  // <binding> is the same as a layout "sensors" entry: name/source/unit regexes against the
+  // WigiDash Manager (HWiNFO) list, or "system" for values computed by the widget itself:
+  //   drive.<letter>.usedpct | usedgb | freegb | totalgb, volume, refresh, uptime
+  // Keys starting with "_" are helpers that text templates can reference.
+  // Values keep AIDA64's native units (MHz, MB, °C, W, ...), since skins were designed for them.
+  //
+  // Files are merged, later ones overriding individual entries:
+  //   1. this file in the widget folder
+  //   2. aida-sensors.json in the skin's folder (applies to every skin there)
+  //   3. <skin file name>.aida-sensors.json next to the skin (that skin only)
+  // Override files only need the entries they change, e.g. { "map": { "SDATE": { "text": "{date:dd   MM   yyyy}" } } }
+
+  "map": {
+    // ---------------------------------------------------------------- CPU
+    "TCPU":       { "sensor": { "name": "^(CPU|CPU \\(Tctl/Tdie\\))$", "source": "^CPU \\[#0\\]", "unit": "C", "demo": 45 }, "format": "0" },
+    "TCPUDIO":    { "sensor": { "name": "^CPU Die$", "source": "^CPU \\[#0\\]", "demo": 47 }, "format": "0" },
+    "SCPUCLK":    { "unit": "MHz", "sensor": { "name": "^Core \\d+ Clock$", "source": "^CPU \\[#0\\]", "aggregate": "avg", "demo": 5200 }, "format": "0" },
+    "SCPUUTI":    { "sensor": { "name": "^Total CPU Usage$", "demo": 12 }, "format": "0" },
+    "PCPUPKG":    { "sensor": { "name": "^CPU Package Power$", "demo": 48.5 }, "format": "0.00" },
+    "VCPU":       { "sensor": { "name": "^(Vcore|CPU VDDCR_VDD Voltage)$", "demo": 1.21 }, "format": "0.000" },
+    "FCPU":       { "sensor": { "name": "^CPU( Fan)?$", "unit": "RPM", "demo": 900 }, "format": "0" },
+    "TVRM":       { "sensor": { "name": "^CPU VDDCR_VDD VRM$", "demo": 41 }, "format": "0" },
+    "SNBCLK":     { "unit": "MHz", "sensor": { "name": "^Infinity Fabric Clock$", "demo": 2000 }, "format": "0" },
+
+    // ---------------------------------------------------------------- GPU
+    "TGPU1":      { "sensor": { "name": "^GPU Temperature$", "source": "^GPU \\[#0\\]", "demo": 38 }, "format": "0" },
+    "SGPU1CLK":   { "unit": "MHz", "sensor": { "name": "^GPU Clock$", "source": "^GPU \\[#0\\]", "demo": 2407 }, "format": "0" },
+    "SGPU1UTI":   { "sensor": { "name": "^GPU Core Load$", "source": "^GPU \\[#0\\]", "demo": 23 }, "format": "0" },
+    "PGPU1":      { "sensor": { "name": "^GPU Power$", "source": "^GPU \\[#0\\]", "unit": "^W$", "demo": 112.4 }, "format": "0.00" },
+    "VGPU1":      { "sensor": { "name": "^GPU Core Voltage$", "source": "^GPU \\[#0\\]", "demo": 0.89 }, "format": "0.000" },
+    "FGPU1":      { "sensor": { "name": "^GPU Fan1$", "source": "^GPU \\[#0\\]", "unit": "RPM", "demo": 1100 }, "format": "0" },
+    "DGPU1":      { "sensor": { "name": "^GPU Fan1$", "source": "^GPU \\[#0\\]", "unit": "%", "demo": 35 }, "format": "0" },
+    "SVMEMUSAGE": { "sensor": { "name": "^GPU Memory Usage$", "source": "^GPU \\[#0\\]", "unit": "%", "demo": 11 }, "format": "0" },
+    "SUSEDVMEM":  { "unit": "MB", "sensor": { "name": "^GPU Memory Allocated$", "source": "^GPU \\[#0\\]", "demo": 3600 }, "format": "0" },
+    "SFREEVMEM":  { "unit": "MB", "sensor": { "name": "^GPU Memory Available$", "source": "^GPU \\[#0\\]", "demo": 29000 }, "format": "0" },
+    "SGPU1USEDDEMEM": { "unit": "MB", "sensor": { "name": "^GPU D3D Memory Dedicated$", "source": "^GPU \\[#0\\]", "demo": 3400 }, "format": "0" },
+    "SGPU1PERFCAP": { "text": "-" },
+
+    // 12V-2x6 per-pin readings (AIDA "Power Monitor #n") from the Thermal Grizzly WireView
+    "CPWRMON1":   { "sensor": { "name": "^Pin 1 Current$", "demo": 5.1 }, "format": "0.00" },
+    "CPWRMON2":   { "sensor": { "name": "^Pin 2 Current$", "demo": 5.4 }, "format": "0.00" },
+    "CPWRMON3":   { "sensor": { "name": "^Pin 3 Current$", "demo": 4.9 }, "format": "0.00" },
+    "CPWRMON4":   { "sensor": { "name": "^Pin 4 Current$", "demo": 6.3 }, "format": "0.00" },
+    "CPWRMON5":   { "sensor": { "name": "^Pin 5 Current$", "demo": 5.0 }, "format": "0.00" },
+    "CPWRMON6":   { "sensor": { "name": "^Pin 6 Current$", "demo": 5.2 }, "format": "0.00" },
+    "PPWRMONTOT": { "sensor": { "name": "^Total Power$", "source": "WireView", "demo": 330 }, "format": "0.00" },
+
+    // ---------------------------------------------------------------- memory
+    "SMEMUTI":    { "sensor": { "name": "^Physical Memory Load$", "demo": 28 }, "format": "0" },
+    "SUSEDMEM":   { "unit": "MB", "sensor": { "name": "^Physical Memory Used$", "demo": 17100 }, "format": "0" },
+    "SFREEMEM":   { "unit": "MB", "sensor": { "name": "^Physical Memory Available$", "demo": 44500 }, "format": "0" },
+    "SMEMCLK":    { "unit": "MHz", "sensor": { "name": "^Memory Clock$", "demo": 3000 }, "format": "0" },
+    "SMEMSPEED":  { "text": "{MEMTYPE}-{_memrate:0}" },
+    "SMEMTIM":    { "text": "{_tcas:0}-{_trcd:0}-{_trp:0}-{_tras:0} CR{_cr:0}" },
+    "_memrate":   { "sensor": { "name": "^Memory Clock$", "scale": 2, "demo": 6000 } },
+    "_tcas":      { "sensor": { "name": "^Tcas$", "demo": 30 } },
+    "_trcd":      { "sensor": { "name": "^Trcd$", "demo": 40 } },
+    "_trp":       { "sensor": { "name": "^Trp$", "demo": 40 } },
+    "_tras":      { "sensor": { "name": "^Tras$", "demo": 96 } },
+    "_cr":        { "sensor": { "name": "^Command Rate$", "demo": 1 } },
+    "TDIMMTS2":   { "sensor": { "name": "^(DIMM|SPD Hub).*Temp", "index": 0, "demo": 38 }, "format": "0" },
+    "TDIMMTS4":   { "sensor": { "name": "^(DIMM|SPD Hub).*Temp", "index": 1, "demo": 38 }, "format": "0" },
+
+    // ---------------------------------------------------------------- board, cooling
+    "TMOBO":      { "sensor": { "name": "^Motherboard$", "unit": "C", "demo": 34 }, "format": "0" },
+    // AIDA numbers Aqua Computer channels after the motherboard ones; edit if yours differ.
+    "TTEMP1":     { "sensor": { "name": "^Temperature 1$", "source": "Aqua Computer Octo", "demo": 29 }, "format": "0" },
+    "TTEMP4":     { "sensor": { "name": "^Temperature 4$", "source": "Aqua Computer Octo", "demo": 29 }, "format": "0" },
+    "WFLOW1":     { "sensor": { "name": "^Flow$", "source": "Aqua Computer Octo", "demo": 93 }, "format": "0.00" },
+    "FFAN21":     { "sensor": { "name": "^Fan 1$", "source": "Aqua Computer Octo", "demo": 800 }, "format": "0" },
+    "FFAN23":     { "sensor": { "name": "^Fan 3$", "source": "Aqua Computer Octo", "demo": 800 }, "format": "0" },
+    "FFAN24":     { "sensor": { "name": "^Fan 4$", "source": "Aqua Computer Octo", "demo": 2700 }, "format": "0" },
+    "FAIOPUMP":   { "sensor": { "name": "^Fan 4$", "source": "Aqua Computer Octo", "demo": 2700 }, "format": "0" },
+
+    // ---------------------------------------------------------------- drives
+    "THDD1":        { "sensor": { "name": "^Drive Temperature$", "source": "^S\\.M\\.A\\.R\\.T\\.", "index": 0, "demo": 43 }, "format": "0" },
+    "THDD2":        { "sensor": { "name": "^Drive Temperature$", "source": "^S\\.M\\.A\\.R\\.T\\.", "index": 1, "demo": 40 }, "format": "0" },
+    "SDRVCUTI":     { "sensor": { "system": "drive.C.usedpct", "demo": 61 }, "format": "0" },
+    "SDRVCUSEDSPC": { "unit": "GB", "sensor": { "system": "drive.C.usedgb", "demo": 570 }, "format": "0" },
+    "SDRVDUTI":     { "sensor": { "system": "drive.D.usedpct", "demo": 42 }, "format": "0" },
+    "SDRVDUSEDSPC": { "unit": "GB", "sensor": { "system": "drive.D.usedgb", "demo": 1530 }, "format": "0" },
+
+    // ---------------------------------------------------------------- network
+    // AIDA numbers adapters its own way; these sum every adapter HWiNFO reports.
+    "SNIC1DLRATE": { "unit": "KB/s", "sensor": { "name": "^Current DL rate$", "aggregate": "sum", "demo": 120 }, "format": "0.0" },
+    "SNIC1ULRATE": { "unit": "KB/s", "sensor": { "name": "^Current UP rate$", "aggregate": "sum", "demo": 14 }, "format": "0.0" },
+    "SNIC4DLRATE": { "unit": "KB/s", "sensor": { "name": "^Current DL rate$", "aggregate": "sum", "demo": 120 }, "format": "0.0" },
+    "SNIC4ULRATE": { "unit": "KB/s", "sensor": { "name": "^Current UP rate$", "aggregate": "sum", "demo": 14 }, "format": "0.0" },
+    "SNIC5DLRATE": { "unit": "KB/s", "sensor": { "name": "^Current DL rate$", "aggregate": "sum", "demo": 120 }, "format": "0.0" },
+    "SNIC5ULRATE": { "unit": "KB/s", "sensor": { "name": "^Current UP rate$", "aggregate": "sum", "demo": 14 }, "format": "0.0" },
+    "SNIC3TOTDL":  { "unit": "MB", "sensor": { "name": "^Total DL$", "aggregate": "sum", "demo": 1390 }, "format": "0" },
+    "SNIC3TOTUL":  { "unit": "MB", "sensor": { "name": "^Total UP$", "aggregate": "sum", "demo": 410 }, "format": "0" },
+
+    // ---------------------------------------------------------------- framerate (HWiNFO PresentMon)
+    "SAIDAFPS":   { "sensor": { "name": "^Framerate Presented$", "source": "^PresentMon", "staleMs": 3000, "demo": 144 }, "format": "0" },
+    "SRTSSFPS":   { "sensor": { "name": "^Framerate Presented$", "source": "^PresentMon", "staleMs": 3000, "demo": 144 }, "format": "0" },
+    "SFRAPS":     { "sensor": { "name": "^Framerate Presented$", "source": "^PresentMon", "staleMs": 3000, "demo": 144 }, "format": "0" },
+
+    // ---------------------------------------------------------------- system
+    // .NET date/time formats. Skins often expect a particular layout (e.g. "dd  MM  yyyy");
+    // override per skin with a "<skin name>.aida-sensors.json" next to it.
+    "SDATE":      { "text": "{date:d}" },
+    "STIME":      { "text": "{time:HH:mm:ss}" },
+    "STIMENS":    { "text": "{time:HH:mm}" },
+    "SUPTIME":    { "text": "{UPTIME}" },
+    "SBIOSVER":   { "text": "{BIOSVER}" },
+    "SDESKRES":   { "text": "{DESKRES}" },
+    "SVREFRATE":  { "sensor": { "system": "refresh", "demo": 165 }, "format": "0" },
+    "SMASTVOL":   { "sensor": { "system": "volume", "demo": 40 }, "format": "0" }
+  }
+}

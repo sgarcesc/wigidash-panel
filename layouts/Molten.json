@@ -1,0 +1,3940 @@
+{
+  "name": "Molten",
+  "canvas": {
+    "width": 1024,
+    "height": 600,
+    "background": "#100B09"
+  },
+  "refreshMs": 1000,
+  "sensors": {
+    "cpuTemp": {
+      "name": "^CPU$",
+      "source": "^CPU \\[#0\\]",
+      "unit": "C",
+      "demo": 52
+    },
+    "cpuClock": {
+      "name": "^Core \\d+ Clock$",
+      "source": "^CPU \\[#0\\]",
+      "aggregate": "avg",
+      "demo": 5225
+    },
+    "cpuPower": {
+      "name": "^CPU Package Power$",
+      "demo": 63.4
+    },
+    "cpuLoad": {
+      "name": "^Total CPU Usage$",
+      "demo": 24
+    },
+    "memUsed": {
+      "name": "^Physical Memory Used$",
+      "scale": 0.0009765625,
+      "demo": 17.4
+    },
+    "memTotal": {
+      "name": "^Physical Memory (Used|Available)$",
+      "aggregate": "sum",
+      "scale": 0.0009765625,
+      "demo": 61.7
+    },
+    "memLoad": {
+      "name": "^Physical Memory Load$",
+      "demo": 28
+    },
+    "gpuTemp": {
+      "name": "^GPU Temperature$",
+      "source": "^GPU \\[#0\\]",
+      "demo": 61
+    },
+    "gpuClock": {
+      "name": "^GPU Clock$",
+      "source": "^GPU \\[#0\\]",
+      "demo": 2655
+    },
+    "gpuPower": {
+      "name": "^GPU Power$",
+      "source": "^GPU \\[#0\\]",
+      "unit": "^W$",
+      "demo": 412
+    },
+    "gpuLoad": {
+      "name": "^GPU Core Load$",
+      "source": "^GPU \\[#0\\]",
+      "demo": 87
+    },
+    "vramUsed": {
+      "name": "^GPU Memory Allocated$",
+      "source": "^GPU \\[#0\\]",
+      "scale": 0.0009765625,
+      "demo": 11.6
+    },
+    "vramTotal": {
+      "name": "^GPU Memory (Allocated|Available)$",
+      "source": "^GPU \\[#0\\]",
+      "aggregate": "sum",
+      "scale": 0.0009765625,
+      "demo": 31.8
+    },
+    "vramLoad": {
+      "name": "^GPU Memory Usage$",
+      "source": "^GPU \\[#0\\]",
+      "unit": "%",
+      "demo": 36
+    },
+    "fps": {
+      "name": "^Framerate Presented$",
+      "source": "^PresentMon",
+      "staleMs": 3000,
+      "demo": 144
+    },
+    "pump": {
+      "name": "^Fan 4$",
+      "source": "Aqua Computer Octo",
+      "unit": "RPM",
+      "demo": 2750
+    },
+    "water": {
+      "name": "^Temperature 4$",
+      "source": "Aqua Computer Octo",
+      "demo": 31.2
+    },
+    "fan": {
+      "name": "^Fan 1$",
+      "source": "Aqua Computer Octo",
+      "unit": "RPM",
+      "demo": 860
+    },
+    "flow": {
+      "name": "^Flow$",
+      "source": "Aqua Computer Octo",
+      "demo": 94
+    },
+    "netDown": {
+      "name": "^Current DL rate$",
+      "aggregate": "sum",
+      "scale": 0.008192,
+      "demo": 182.4
+    },
+    "netUp": {
+      "name": "^Current UP rate$",
+      "aggregate": "sum",
+      "scale": 0.008192,
+      "demo": 21.7
+    },
+    "pin1": {
+      "name": "^Pin 1 Current$",
+      "source": "WireView",
+      "demo": 5.4
+    },
+    "pin2": {
+      "name": "^Pin 2 Current$",
+      "source": "WireView",
+      "demo": 5.9
+    },
+    "pin3": {
+      "name": "^Pin 3 Current$",
+      "source": "WireView",
+      "demo": 5.2
+    },
+    "pin4": {
+      "name": "^Pin 4 Current$",
+      "source": "WireView",
+      "demo": 6.6
+    },
+    "pin5": {
+      "name": "^Pin 5 Current$",
+      "source": "WireView",
+      "demo": 5.7
+    },
+    "pin6": {
+      "name": "^Pin 6 Current$",
+      "source": "WireView",
+      "demo": 5.8
+    }
+  },
+  "elements": [
+    {
+      "type": "rect",
+      "x": 12,
+      "y": 12,
+      "w": 328,
+      "h": 450,
+      "color": "#33261F",
+      "radius": 10
+    },
+    {
+      "type": "rect",
+      "x": 15,
+      "y": 15,
+      "w": 322,
+      "h": 444,
+      "color": "#1B1411",
+      "radius": 8
+    },
+    {
+      "type": "rect",
+      "x": 36,
+      "y": 20,
+      "w": 280,
+      "h": 34,
+      "color": "#251C17",
+      "radius": 17
+    },
+    {
+      "type": "rect",
+      "x": 24,
+      "y": 32,
+      "w": 10,
+      "h": 10,
+      "color": "#FF7A1A",
+      "radius": 5
+    },
+    {
+      "type": "rect",
+      "x": 318,
+      "y": 32,
+      "w": 10,
+      "h": 10,
+      "color": "#FF7A1A",
+      "radius": 5
+    },
+    {
+      "type": "text",
+      "x": 52,
+      "y": 24,
+      "text": "CPU",
+      "font": "Roboto Black",
+      "size": 15,
+      "color": "#F6EAE1"
+    },
+    {
+      "type": "text",
+      "x": 104,
+      "y": 30,
+      "text": "{CPUMODEL}",
+      "font": "Roboto Medium",
+      "size": 9,
+      "color": "#A08A7D"
+    },
+    {
+      "type": "rect",
+      "x": 36,
+      "y": 62,
+      "w": 280,
+      "h": 196,
+      "color": "#251C17",
+      "radius": 8
+    },
+    {
+      "type": "rect",
+      "x": 22,
+      "y": 100,
+      "w": 4,
+      "h": 120,
+      "color": "#FF7A1A",
+      "radius": 2
+    },
+    {
+      "type": "rect",
+      "x": 326,
+      "y": 100,
+      "w": 4,
+      "h": 120,
+      "color": "#FF7A1A",
+      "radius": 2
+    },
+    {
+      "type": "gauge",
+      "x": 106,
+      "y": 88,
+      "w": 140,
+      "thickness": 2,
+      "start": 135,
+      "sweep": 360,
+      "roundCaps": false,
+      "sensor": null,
+      "min": 0,
+      "max": 1,
+      "color": "#33261F",
+      "bg": "#33261F"
+    },
+    {
+      "type": "gauge",
+      "x": 84,
+      "y": 66,
+      "w": 184,
+      "thickness": 16,
+      "start": 135.0,
+      "sweep": 5.4,
+      "roundCaps": false,
+      "sensor": "cpuTemp",
+      "min": 21.1111,
+      "max": 21.1133,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21",
+      "thresholds": [
+        {
+          "at": 75,
+          "color": "#FFC145"
+        },
+        {
+          "at": 88,
+          "color": "#FF3D2E"
+        }
+      ]
+    },
+    {
+      "type": "gauge",
+      "x": 84,
+      "y": 66,
+      "w": 184,
+      "thickness": 16,
+      "start": 142.5,
+      "sweep": 5.4,
+      "roundCaps": false,
+      "sensor": "cpuTemp",
+      "min": 23.3333,
+      "max": 23.3356,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21",
+      "thresholds": [
+        {
+          "at": 75,
+          "color": "#FFC145"
+        },
+        {
+          "at": 88,
+          "color": "#FF3D2E"
+        }
+      ]
+    },
+    {
+      "type": "gauge",
+      "x": 84,
+      "y": 66,
+      "w": 184,
+      "thickness": 16,
+      "start": 150.0,
+      "sweep": 5.4,
+      "roundCaps": false,
+      "sensor": "cpuTemp",
+      "min": 25.5556,
+      "max": 25.5578,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21",
+      "thresholds": [
+        {
+          "at": 75,
+          "color": "#FFC145"
+        },
+        {
+          "at": 88,
+          "color": "#FF3D2E"
+        }
+      ]
+    },
+    {
+      "type": "gauge",
+      "x": 84,
+      "y": 66,
+      "w": 184,
+      "thickness": 16,
+      "start": 157.5,
+      "sweep": 5.4,
+      "roundCaps": false,
+      "sensor": "cpuTemp",
+      "min": 27.7778,
+      "max": 27.78,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21",
+      "thresholds": [
+        {
+          "at": 75,
+          "color": "#FFC145"
+        },
+        {
+          "at": 88,
+          "color": "#FF3D2E"
+        }
+      ]
+    },
+    {
+      "type": "gauge",
+      "x": 84,
+      "y": 66,
+      "w": 184,
+      "thickness": 16,
+      "start": 165.0,
+      "sweep": 5.4,
+      "roundCaps": false,
+      "sensor": "cpuTemp",
+      "min": 30.0,
+      "max": 30.0022,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21",
+      "thresholds": [
+        {
+          "at": 75,
+          "color": "#FFC145"
+        },
+        {
+          "at": 88,
+          "color": "#FF3D2E"
+        }
+      ]
+    },
+    {
+      "type": "gauge",
+      "x": 84,
+      "y": 66,
+      "w": 184,
+      "thickness": 16,
+      "start": 172.5,
+      "sweep": 5.4,
+      "roundCaps": false,
+      "sensor": "cpuTemp",
+      "min": 32.2222,
+      "max": 32.2244,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21",
+      "thresholds": [
+        {
+          "at": 75,
+          "color": "#FFC145"
+        },
+        {
+          "at": 88,
+          "color": "#FF3D2E"
+        }
+      ]
+    },
+    {
+      "type": "gauge",
+      "x": 84,
+      "y": 66,
+      "w": 184,
+      "thickness": 16,
+      "start": 180.0,
+      "sweep": 5.4,
+      "roundCaps": false,
+      "sensor": "cpuTemp",
+      "min": 34.4444,
+      "max": 34.4467,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21",
+      "thresholds": [
+        {
+          "at": 75,
+          "color": "#FFC145"
+        },
+        {
+          "at": 88,
+          "color": "#FF3D2E"
+        }
+      ]
+    },
+    {
+      "type": "gauge",
+      "x": 84,
+      "y": 66,
+      "w": 184,
+      "thickness": 16,
+      "start": 187.5,
+      "sweep": 5.4,
+      "roundCaps": false,
+      "sensor": "cpuTemp",
+      "min": 36.6667,
+      "max": 36.6689,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21",
+      "thresholds": [
+        {
+          "at": 75,
+          "color": "#FFC145"
+        },
+        {
+          "at": 88,
+          "color": "#FF3D2E"
+        }
+      ]
+    },
+    {
+      "type": "gauge",
+      "x": 84,
+      "y": 66,
+      "w": 184,
+      "thickness": 16,
+      "start": 195.0,
+      "sweep": 5.4,
+      "roundCaps": false,
+      "sensor": "cpuTemp",
+      "min": 38.8889,
+      "max": 38.8911,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21",
+      "thresholds": [
+        {
+          "at": 75,
+          "color": "#FFC145"
+        },
+        {
+          "at": 88,
+          "color": "#FF3D2E"
+        }
+      ]
+    },
+    {
+      "type": "gauge",
+      "x": 84,
+      "y": 66,
+      "w": 184,
+      "thickness": 16,
+      "start": 202.5,
+      "sweep": 5.4,
+      "roundCaps": false,
+      "sensor": "cpuTemp",
+      "min": 41.1111,
+      "max": 41.1133,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21",
+      "thresholds": [
+        {
+          "at": 75,
+          "color": "#FFC145"
+        },
+        {
+          "at": 88,
+          "color": "#FF3D2E"
+        }
+      ]
+    },
+    {
+      "type": "gauge",
+      "x": 84,
+      "y": 66,
+      "w": 184,
+      "thickness": 16,
+      "start": 210.0,
+      "sweep": 5.4,
+      "roundCaps": false,
+      "sensor": "cpuTemp",
+      "min": 43.3333,
+      "max": 43.3356,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21",
+      "thresholds": [
+        {
+          "at": 75,
+          "color": "#FFC145"
+        },
+        {
+          "at": 88,
+          "color": "#FF3D2E"
+        }
+      ]
+    },
+    {
+      "type": "gauge",
+      "x": 84,
+      "y": 66,
+      "w": 184,
+      "thickness": 16,
+      "start": 217.5,
+      "sweep": 5.4,
+      "roundCaps": false,
+      "sensor": "cpuTemp",
+      "min": 45.5556,
+      "max": 45.5578,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21",
+      "thresholds": [
+        {
+          "at": 75,
+          "color": "#FFC145"
+        },
+        {
+          "at": 88,
+          "color": "#FF3D2E"
+        }
+      ]
+    },
+    {
+      "type": "gauge",
+      "x": 84,
+      "y": 66,
+      "w": 184,
+      "thickness": 16,
+      "start": 225.0,
+      "sweep": 5.4,
+      "roundCaps": false,
+      "sensor": "cpuTemp",
+      "min": 47.7778,
+      "max": 47.78,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21",
+      "thresholds": [
+        {
+          "at": 75,
+          "color": "#FFC145"
+        },
+        {
+          "at": 88,
+          "color": "#FF3D2E"
+        }
+      ]
+    },
+    {
+      "type": "gauge",
+      "x": 84,
+      "y": 66,
+      "w": 184,
+      "thickness": 16,
+      "start": 232.5,
+      "sweep": 5.4,
+      "roundCaps": false,
+      "sensor": "cpuTemp",
+      "min": 50.0,
+      "max": 50.0022,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21",
+      "thresholds": [
+        {
+          "at": 75,
+          "color": "#FFC145"
+        },
+        {
+          "at": 88,
+          "color": "#FF3D2E"
+        }
+      ]
+    },
+    {
+      "type": "gauge",
+      "x": 84,
+      "y": 66,
+      "w": 184,
+      "thickness": 16,
+      "start": 240.0,
+      "sweep": 5.4,
+      "roundCaps": false,
+      "sensor": "cpuTemp",
+      "min": 52.2222,
+      "max": 52.2244,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21",
+      "thresholds": [
+        {
+          "at": 75,
+          "color": "#FFC145"
+        },
+        {
+          "at": 88,
+          "color": "#FF3D2E"
+        }
+      ]
+    },
+    {
+      "type": "gauge",
+      "x": 84,
+      "y": 66,
+      "w": 184,
+      "thickness": 16,
+      "start": 247.5,
+      "sweep": 5.4,
+      "roundCaps": false,
+      "sensor": "cpuTemp",
+      "min": 54.4444,
+      "max": 54.4467,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21",
+      "thresholds": [
+        {
+          "at": 75,
+          "color": "#FFC145"
+        },
+        {
+          "at": 88,
+          "color": "#FF3D2E"
+        }
+      ]
+    },
+    {
+      "type": "gauge",
+      "x": 84,
+      "y": 66,
+      "w": 184,
+      "thickness": 16,
+      "start": 255.0,
+      "sweep": 5.4,
+      "roundCaps": false,
+      "sensor": "cpuTemp",
+      "min": 56.6667,
+      "max": 56.6689,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21",
+      "thresholds": [
+        {
+          "at": 75,
+          "color": "#FFC145"
+        },
+        {
+          "at": 88,
+          "color": "#FF3D2E"
+        }
+      ]
+    },
+    {
+      "type": "gauge",
+      "x": 84,
+      "y": 66,
+      "w": 184,
+      "thickness": 16,
+      "start": 262.5,
+      "sweep": 5.4,
+      "roundCaps": false,
+      "sensor": "cpuTemp",
+      "min": 58.8889,
+      "max": 58.8911,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21",
+      "thresholds": [
+        {
+          "at": 75,
+          "color": "#FFC145"
+        },
+        {
+          "at": 88,
+          "color": "#FF3D2E"
+        }
+      ]
+    },
+    {
+      "type": "gauge",
+      "x": 84,
+      "y": 66,
+      "w": 184,
+      "thickness": 16,
+      "start": 270.0,
+      "sweep": 5.4,
+      "roundCaps": false,
+      "sensor": "cpuTemp",
+      "min": 61.1111,
+      "max": 61.1133,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21",
+      "thresholds": [
+        {
+          "at": 75,
+          "color": "#FFC145"
+        },
+        {
+          "at": 88,
+          "color": "#FF3D2E"
+        }
+      ]
+    },
+    {
+      "type": "gauge",
+      "x": 84,
+      "y": 66,
+      "w": 184,
+      "thickness": 16,
+      "start": 277.5,
+      "sweep": 5.4,
+      "roundCaps": false,
+      "sensor": "cpuTemp",
+      "min": 63.3333,
+      "max": 63.3356,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21",
+      "thresholds": [
+        {
+          "at": 75,
+          "color": "#FFC145"
+        },
+        {
+          "at": 88,
+          "color": "#FF3D2E"
+        }
+      ]
+    },
+    {
+      "type": "gauge",
+      "x": 84,
+      "y": 66,
+      "w": 184,
+      "thickness": 16,
+      "start": 285.0,
+      "sweep": 5.4,
+      "roundCaps": false,
+      "sensor": "cpuTemp",
+      "min": 65.5556,
+      "max": 65.5578,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21",
+      "thresholds": [
+        {
+          "at": 75,
+          "color": "#FFC145"
+        },
+        {
+          "at": 88,
+          "color": "#FF3D2E"
+        }
+      ]
+    },
+    {
+      "type": "gauge",
+      "x": 84,
+      "y": 66,
+      "w": 184,
+      "thickness": 16,
+      "start": 292.5,
+      "sweep": 5.4,
+      "roundCaps": false,
+      "sensor": "cpuTemp",
+      "min": 67.7778,
+      "max": 67.78,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21",
+      "thresholds": [
+        {
+          "at": 75,
+          "color": "#FFC145"
+        },
+        {
+          "at": 88,
+          "color": "#FF3D2E"
+        }
+      ]
+    },
+    {
+      "type": "gauge",
+      "x": 84,
+      "y": 66,
+      "w": 184,
+      "thickness": 16,
+      "start": 300.0,
+      "sweep": 5.4,
+      "roundCaps": false,
+      "sensor": "cpuTemp",
+      "min": 70.0,
+      "max": 70.0022,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21",
+      "thresholds": [
+        {
+          "at": 75,
+          "color": "#FFC145"
+        },
+        {
+          "at": 88,
+          "color": "#FF3D2E"
+        }
+      ]
+    },
+    {
+      "type": "gauge",
+      "x": 84,
+      "y": 66,
+      "w": 184,
+      "thickness": 16,
+      "start": 307.5,
+      "sweep": 5.4,
+      "roundCaps": false,
+      "sensor": "cpuTemp",
+      "min": 72.2222,
+      "max": 72.2244,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21",
+      "thresholds": [
+        {
+          "at": 75,
+          "color": "#FFC145"
+        },
+        {
+          "at": 88,
+          "color": "#FF3D2E"
+        }
+      ]
+    },
+    {
+      "type": "gauge",
+      "x": 84,
+      "y": 66,
+      "w": 184,
+      "thickness": 16,
+      "start": 315.0,
+      "sweep": 5.4,
+      "roundCaps": false,
+      "sensor": "cpuTemp",
+      "min": 74.4444,
+      "max": 74.4467,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21",
+      "thresholds": [
+        {
+          "at": 75,
+          "color": "#FFC145"
+        },
+        {
+          "at": 88,
+          "color": "#FF3D2E"
+        }
+      ]
+    },
+    {
+      "type": "gauge",
+      "x": 84,
+      "y": 66,
+      "w": 184,
+      "thickness": 16,
+      "start": 322.5,
+      "sweep": 5.4,
+      "roundCaps": false,
+      "sensor": "cpuTemp",
+      "min": 76.6667,
+      "max": 76.6689,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21",
+      "thresholds": [
+        {
+          "at": 75,
+          "color": "#FFC145"
+        },
+        {
+          "at": 88,
+          "color": "#FF3D2E"
+        }
+      ]
+    },
+    {
+      "type": "gauge",
+      "x": 84,
+      "y": 66,
+      "w": 184,
+      "thickness": 16,
+      "start": 330.0,
+      "sweep": 5.4,
+      "roundCaps": false,
+      "sensor": "cpuTemp",
+      "min": 78.8889,
+      "max": 78.8911,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21",
+      "thresholds": [
+        {
+          "at": 75,
+          "color": "#FFC145"
+        },
+        {
+          "at": 88,
+          "color": "#FF3D2E"
+        }
+      ]
+    },
+    {
+      "type": "gauge",
+      "x": 84,
+      "y": 66,
+      "w": 184,
+      "thickness": 16,
+      "start": 337.5,
+      "sweep": 5.4,
+      "roundCaps": false,
+      "sensor": "cpuTemp",
+      "min": 81.1111,
+      "max": 81.1133,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21",
+      "thresholds": [
+        {
+          "at": 75,
+          "color": "#FFC145"
+        },
+        {
+          "at": 88,
+          "color": "#FF3D2E"
+        }
+      ]
+    },
+    {
+      "type": "gauge",
+      "x": 84,
+      "y": 66,
+      "w": 184,
+      "thickness": 16,
+      "start": 345.0,
+      "sweep": 5.4,
+      "roundCaps": false,
+      "sensor": "cpuTemp",
+      "min": 83.3333,
+      "max": 83.3356,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21",
+      "thresholds": [
+        {
+          "at": 75,
+          "color": "#FFC145"
+        },
+        {
+          "at": 88,
+          "color": "#FF3D2E"
+        }
+      ]
+    },
+    {
+      "type": "gauge",
+      "x": 84,
+      "y": 66,
+      "w": 184,
+      "thickness": 16,
+      "start": 352.5,
+      "sweep": 5.4,
+      "roundCaps": false,
+      "sensor": "cpuTemp",
+      "min": 85.5556,
+      "max": 85.5578,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21",
+      "thresholds": [
+        {
+          "at": 75,
+          "color": "#FFC145"
+        },
+        {
+          "at": 88,
+          "color": "#FF3D2E"
+        }
+      ]
+    },
+    {
+      "type": "gauge",
+      "x": 84,
+      "y": 66,
+      "w": 184,
+      "thickness": 16,
+      "start": 360.0,
+      "sweep": 5.4,
+      "roundCaps": false,
+      "sensor": "cpuTemp",
+      "min": 87.7778,
+      "max": 87.78,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21",
+      "thresholds": [
+        {
+          "at": 75,
+          "color": "#FFC145"
+        },
+        {
+          "at": 88,
+          "color": "#FF3D2E"
+        }
+      ]
+    },
+    {
+      "type": "gauge",
+      "x": 84,
+      "y": 66,
+      "w": 184,
+      "thickness": 16,
+      "start": 367.5,
+      "sweep": 5.4,
+      "roundCaps": false,
+      "sensor": "cpuTemp",
+      "min": 90.0,
+      "max": 90.0022,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21",
+      "thresholds": [
+        {
+          "at": 75,
+          "color": "#FFC145"
+        },
+        {
+          "at": 88,
+          "color": "#FF3D2E"
+        }
+      ]
+    },
+    {
+      "type": "gauge",
+      "x": 84,
+      "y": 66,
+      "w": 184,
+      "thickness": 16,
+      "start": 375.0,
+      "sweep": 5.4,
+      "roundCaps": false,
+      "sensor": "cpuTemp",
+      "min": 92.2222,
+      "max": 92.2244,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21",
+      "thresholds": [
+        {
+          "at": 75,
+          "color": "#FFC145"
+        },
+        {
+          "at": 88,
+          "color": "#FF3D2E"
+        }
+      ]
+    },
+    {
+      "type": "gauge",
+      "x": 84,
+      "y": 66,
+      "w": 184,
+      "thickness": 16,
+      "start": 382.5,
+      "sweep": 5.4,
+      "roundCaps": false,
+      "sensor": "cpuTemp",
+      "min": 94.4444,
+      "max": 94.4467,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21",
+      "thresholds": [
+        {
+          "at": 75,
+          "color": "#FFC145"
+        },
+        {
+          "at": 88,
+          "color": "#FF3D2E"
+        }
+      ]
+    },
+    {
+      "type": "gauge",
+      "x": 84,
+      "y": 66,
+      "w": 184,
+      "thickness": 16,
+      "start": 390.0,
+      "sweep": 5.4,
+      "roundCaps": false,
+      "sensor": "cpuTemp",
+      "min": 96.6667,
+      "max": 96.6689,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21",
+      "thresholds": [
+        {
+          "at": 75,
+          "color": "#FFC145"
+        },
+        {
+          "at": 88,
+          "color": "#FF3D2E"
+        }
+      ]
+    },
+    {
+      "type": "gauge",
+      "x": 84,
+      "y": 66,
+      "w": 184,
+      "thickness": 16,
+      "start": 397.5,
+      "sweep": 5.4,
+      "roundCaps": false,
+      "sensor": "cpuTemp",
+      "min": 98.8889,
+      "max": 98.8911,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21",
+      "thresholds": [
+        {
+          "at": 75,
+          "color": "#FFC145"
+        },
+        {
+          "at": 88,
+          "color": "#FF3D2E"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "x": 84,
+      "y": 114,
+      "text": "{cpuTemp:0}",
+      "font": "Roboto Black",
+      "size": 40,
+      "color": "#F6EAE1",
+      "align": "center",
+      "w": 184
+    },
+    {
+      "type": "text",
+      "x": 84,
+      "y": 172,
+      "text": "°C",
+      "font": "Roboto Medium",
+      "size": 10,
+      "color": "#A08A7D",
+      "align": "center",
+      "w": 184
+    },
+    {
+      "type": "rect",
+      "x": 24,
+      "y": 266,
+      "w": 304,
+      "h": 44,
+      "color": "#251C17",
+      "radius": 6
+    },
+    {
+      "type": "text",
+      "x": 38,
+      "y": 272,
+      "text": "LOAD",
+      "font": "Roboto Medium",
+      "size": 9,
+      "color": "#F6EAE1"
+    },
+    {
+      "type": "text",
+      "x": 314,
+      "y": 268,
+      "text": "{cpuLoad:0} %",
+      "font": "Roboto Medium",
+      "size": 15,
+      "color": "#F6EAE1",
+      "align": "right"
+    },
+    {
+      "type": "bar",
+      "x": 38,
+      "y": 294,
+      "w": 276,
+      "h": 7,
+      "sensor": "cpuLoad",
+      "min": 0,
+      "max": 100,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21",
+      "radius": 3.5
+    },
+    {
+      "type": "rect",
+      "x": 24,
+      "y": 314,
+      "w": 304,
+      "h": 44,
+      "color": "#251C17",
+      "radius": 6
+    },
+    {
+      "type": "text",
+      "x": 38,
+      "y": 320,
+      "text": "CLOCK",
+      "font": "Roboto Medium",
+      "size": 9,
+      "color": "#F6EAE1"
+    },
+    {
+      "type": "text",
+      "x": 314,
+      "y": 316,
+      "text": "{cpuClock:0} MHz",
+      "font": "Roboto Medium",
+      "size": 15,
+      "color": "#F6EAE1",
+      "align": "right"
+    },
+    {
+      "type": "bar",
+      "x": 38,
+      "y": 342,
+      "w": 276,
+      "h": 7,
+      "sensor": "cpuClock",
+      "min": 0,
+      "max": 5700,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21",
+      "radius": 3.5
+    },
+    {
+      "type": "rect",
+      "x": 24,
+      "y": 362,
+      "w": 304,
+      "h": 44,
+      "color": "#251C17",
+      "radius": 6
+    },
+    {
+      "type": "text",
+      "x": 38,
+      "y": 368,
+      "text": "POWER",
+      "font": "Roboto Medium",
+      "size": 9,
+      "color": "#F6EAE1"
+    },
+    {
+      "type": "text",
+      "x": 314,
+      "y": 364,
+      "text": "{cpuPower:0.0} W",
+      "font": "Roboto Medium",
+      "size": 15,
+      "color": "#F6EAE1",
+      "align": "right"
+    },
+    {
+      "type": "bar",
+      "x": 38,
+      "y": 390,
+      "w": 276,
+      "h": 7,
+      "sensor": "cpuPower",
+      "min": 0,
+      "max": 160,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21",
+      "radius": 3.5
+    },
+    {
+      "type": "rect",
+      "x": 24,
+      "y": 410,
+      "w": 304,
+      "h": 44,
+      "color": "#251C17",
+      "radius": 6
+    },
+    {
+      "type": "text",
+      "x": 38,
+      "y": 416,
+      "text": "MEMORY",
+      "font": "Roboto Medium",
+      "size": 9,
+      "color": "#F6EAE1"
+    },
+    {
+      "type": "text",
+      "x": 314,
+      "y": 412,
+      "text": "{memUsed:0.0} / {memTotal:0} GB",
+      "font": "Roboto Medium",
+      "size": 15,
+      "color": "#F6EAE1",
+      "align": "right"
+    },
+    {
+      "type": "bar",
+      "x": 38,
+      "y": 438,
+      "w": 276,
+      "h": 7,
+      "sensor": "memLoad",
+      "min": 0,
+      "max": 100,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21",
+      "radius": 3.5
+    },
+    {
+      "type": "rect",
+      "x": 348,
+      "y": 12,
+      "w": 328,
+      "h": 450,
+      "color": "#33261F",
+      "radius": 10
+    },
+    {
+      "type": "rect",
+      "x": 351,
+      "y": 15,
+      "w": 322,
+      "h": 444,
+      "color": "#1B1411",
+      "radius": 8
+    },
+    {
+      "type": "rect",
+      "x": 372,
+      "y": 20,
+      "w": 280,
+      "h": 34,
+      "color": "#251C17",
+      "radius": 17
+    },
+    {
+      "type": "rect",
+      "x": 360,
+      "y": 32,
+      "w": 10,
+      "h": 10,
+      "color": "#FF7A1A",
+      "radius": 5
+    },
+    {
+      "type": "rect",
+      "x": 654,
+      "y": 32,
+      "w": 10,
+      "h": 10,
+      "color": "#FF7A1A",
+      "radius": 5
+    },
+    {
+      "type": "text",
+      "x": 388,
+      "y": 24,
+      "text": "GPU",
+      "font": "Roboto Black",
+      "size": 15,
+      "color": "#F6EAE1"
+    },
+    {
+      "type": "text",
+      "x": 440,
+      "y": 30,
+      "text": "{GPUMODEL}",
+      "font": "Roboto Medium",
+      "size": 9,
+      "color": "#A08A7D"
+    },
+    {
+      "type": "rect",
+      "x": 372,
+      "y": 62,
+      "w": 280,
+      "h": 196,
+      "color": "#251C17",
+      "radius": 8
+    },
+    {
+      "type": "rect",
+      "x": 358,
+      "y": 100,
+      "w": 4,
+      "h": 120,
+      "color": "#FF7A1A",
+      "radius": 2
+    },
+    {
+      "type": "rect",
+      "x": 662,
+      "y": 100,
+      "w": 4,
+      "h": 120,
+      "color": "#FF7A1A",
+      "radius": 2
+    },
+    {
+      "type": "gauge",
+      "x": 442,
+      "y": 88,
+      "w": 140,
+      "thickness": 2,
+      "start": 135,
+      "sweep": 360,
+      "roundCaps": false,
+      "sensor": null,
+      "min": 0,
+      "max": 1,
+      "color": "#33261F",
+      "bg": "#33261F"
+    },
+    {
+      "type": "gauge",
+      "x": 420,
+      "y": 66,
+      "w": 184,
+      "thickness": 16,
+      "start": 135.0,
+      "sweep": 5.4,
+      "roundCaps": false,
+      "sensor": "gpuTemp",
+      "min": 21.1111,
+      "max": 21.1133,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21",
+      "thresholds": [
+        {
+          "at": 75,
+          "color": "#FFC145"
+        },
+        {
+          "at": 85,
+          "color": "#FF3D2E"
+        }
+      ]
+    },
+    {
+      "type": "gauge",
+      "x": 420,
+      "y": 66,
+      "w": 184,
+      "thickness": 16,
+      "start": 142.5,
+      "sweep": 5.4,
+      "roundCaps": false,
+      "sensor": "gpuTemp",
+      "min": 23.3333,
+      "max": 23.3356,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21",
+      "thresholds": [
+        {
+          "at": 75,
+          "color": "#FFC145"
+        },
+        {
+          "at": 85,
+          "color": "#FF3D2E"
+        }
+      ]
+    },
+    {
+      "type": "gauge",
+      "x": 420,
+      "y": 66,
+      "w": 184,
+      "thickness": 16,
+      "start": 150.0,
+      "sweep": 5.4,
+      "roundCaps": false,
+      "sensor": "gpuTemp",
+      "min": 25.5556,
+      "max": 25.5578,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21",
+      "thresholds": [
+        {
+          "at": 75,
+          "color": "#FFC145"
+        },
+        {
+          "at": 85,
+          "color": "#FF3D2E"
+        }
+      ]
+    },
+    {
+      "type": "gauge",
+      "x": 420,
+      "y": 66,
+      "w": 184,
+      "thickness": 16,
+      "start": 157.5,
+      "sweep": 5.4,
+      "roundCaps": false,
+      "sensor": "gpuTemp",
+      "min": 27.7778,
+      "max": 27.78,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21",
+      "thresholds": [
+        {
+          "at": 75,
+          "color": "#FFC145"
+        },
+        {
+          "at": 85,
+          "color": "#FF3D2E"
+        }
+      ]
+    },
+    {
+      "type": "gauge",
+      "x": 420,
+      "y": 66,
+      "w": 184,
+      "thickness": 16,
+      "start": 165.0,
+      "sweep": 5.4,
+      "roundCaps": false,
+      "sensor": "gpuTemp",
+      "min": 30.0,
+      "max": 30.0022,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21",
+      "thresholds": [
+        {
+          "at": 75,
+          "color": "#FFC145"
+        },
+        {
+          "at": 85,
+          "color": "#FF3D2E"
+        }
+      ]
+    },
+    {
+      "type": "gauge",
+      "x": 420,
+      "y": 66,
+      "w": 184,
+      "thickness": 16,
+      "start": 172.5,
+      "sweep": 5.4,
+      "roundCaps": false,
+      "sensor": "gpuTemp",
+      "min": 32.2222,
+      "max": 32.2244,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21",
+      "thresholds": [
+        {
+          "at": 75,
+          "color": "#FFC145"
+        },
+        {
+          "at": 85,
+          "color": "#FF3D2E"
+        }
+      ]
+    },
+    {
+      "type": "gauge",
+      "x": 420,
+      "y": 66,
+      "w": 184,
+      "thickness": 16,
+      "start": 180.0,
+      "sweep": 5.4,
+      "roundCaps": false,
+      "sensor": "gpuTemp",
+      "min": 34.4444,
+      "max": 34.4467,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21",
+      "thresholds": [
+        {
+          "at": 75,
+          "color": "#FFC145"
+        },
+        {
+          "at": 85,
+          "color": "#FF3D2E"
+        }
+      ]
+    },
+    {
+      "type": "gauge",
+      "x": 420,
+      "y": 66,
+      "w": 184,
+      "thickness": 16,
+      "start": 187.5,
+      "sweep": 5.4,
+      "roundCaps": false,
+      "sensor": "gpuTemp",
+      "min": 36.6667,
+      "max": 36.6689,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21",
+      "thresholds": [
+        {
+          "at": 75,
+          "color": "#FFC145"
+        },
+        {
+          "at": 85,
+          "color": "#FF3D2E"
+        }
+      ]
+    },
+    {
+      "type": "gauge",
+      "x": 420,
+      "y": 66,
+      "w": 184,
+      "thickness": 16,
+      "start": 195.0,
+      "sweep": 5.4,
+      "roundCaps": false,
+      "sensor": "gpuTemp",
+      "min": 38.8889,
+      "max": 38.8911,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21",
+      "thresholds": [
+        {
+          "at": 75,
+          "color": "#FFC145"
+        },
+        {
+          "at": 85,
+          "color": "#FF3D2E"
+        }
+      ]
+    },
+    {
+      "type": "gauge",
+      "x": 420,
+      "y": 66,
+      "w": 184,
+      "thickness": 16,
+      "start": 202.5,
+      "sweep": 5.4,
+      "roundCaps": false,
+      "sensor": "gpuTemp",
+      "min": 41.1111,
+      "max": 41.1133,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21",
+      "thresholds": [
+        {
+          "at": 75,
+          "color": "#FFC145"
+        },
+        {
+          "at": 85,
+          "color": "#FF3D2E"
+        }
+      ]
+    },
+    {
+      "type": "gauge",
+      "x": 420,
+      "y": 66,
+      "w": 184,
+      "thickness": 16,
+      "start": 210.0,
+      "sweep": 5.4,
+      "roundCaps": false,
+      "sensor": "gpuTemp",
+      "min": 43.3333,
+      "max": 43.3356,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21",
+      "thresholds": [
+        {
+          "at": 75,
+          "color": "#FFC145"
+        },
+        {
+          "at": 85,
+          "color": "#FF3D2E"
+        }
+      ]
+    },
+    {
+      "type": "gauge",
+      "x": 420,
+      "y": 66,
+      "w": 184,
+      "thickness": 16,
+      "start": 217.5,
+      "sweep": 5.4,
+      "roundCaps": false,
+      "sensor": "gpuTemp",
+      "min": 45.5556,
+      "max": 45.5578,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21",
+      "thresholds": [
+        {
+          "at": 75,
+          "color": "#FFC145"
+        },
+        {
+          "at": 85,
+          "color": "#FF3D2E"
+        }
+      ]
+    },
+    {
+      "type": "gauge",
+      "x": 420,
+      "y": 66,
+      "w": 184,
+      "thickness": 16,
+      "start": 225.0,
+      "sweep": 5.4,
+      "roundCaps": false,
+      "sensor": "gpuTemp",
+      "min": 47.7778,
+      "max": 47.78,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21",
+      "thresholds": [
+        {
+          "at": 75,
+          "color": "#FFC145"
+        },
+        {
+          "at": 85,
+          "color": "#FF3D2E"
+        }
+      ]
+    },
+    {
+      "type": "gauge",
+      "x": 420,
+      "y": 66,
+      "w": 184,
+      "thickness": 16,
+      "start": 232.5,
+      "sweep": 5.4,
+      "roundCaps": false,
+      "sensor": "gpuTemp",
+      "min": 50.0,
+      "max": 50.0022,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21",
+      "thresholds": [
+        {
+          "at": 75,
+          "color": "#FFC145"
+        },
+        {
+          "at": 85,
+          "color": "#FF3D2E"
+        }
+      ]
+    },
+    {
+      "type": "gauge",
+      "x": 420,
+      "y": 66,
+      "w": 184,
+      "thickness": 16,
+      "start": 240.0,
+      "sweep": 5.4,
+      "roundCaps": false,
+      "sensor": "gpuTemp",
+      "min": 52.2222,
+      "max": 52.2244,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21",
+      "thresholds": [
+        {
+          "at": 75,
+          "color": "#FFC145"
+        },
+        {
+          "at": 85,
+          "color": "#FF3D2E"
+        }
+      ]
+    },
+    {
+      "type": "gauge",
+      "x": 420,
+      "y": 66,
+      "w": 184,
+      "thickness": 16,
+      "start": 247.5,
+      "sweep": 5.4,
+      "roundCaps": false,
+      "sensor": "gpuTemp",
+      "min": 54.4444,
+      "max": 54.4467,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21",
+      "thresholds": [
+        {
+          "at": 75,
+          "color": "#FFC145"
+        },
+        {
+          "at": 85,
+          "color": "#FF3D2E"
+        }
+      ]
+    },
+    {
+      "type": "gauge",
+      "x": 420,
+      "y": 66,
+      "w": 184,
+      "thickness": 16,
+      "start": 255.0,
+      "sweep": 5.4,
+      "roundCaps": false,
+      "sensor": "gpuTemp",
+      "min": 56.6667,
+      "max": 56.6689,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21",
+      "thresholds": [
+        {
+          "at": 75,
+          "color": "#FFC145"
+        },
+        {
+          "at": 85,
+          "color": "#FF3D2E"
+        }
+      ]
+    },
+    {
+      "type": "gauge",
+      "x": 420,
+      "y": 66,
+      "w": 184,
+      "thickness": 16,
+      "start": 262.5,
+      "sweep": 5.4,
+      "roundCaps": false,
+      "sensor": "gpuTemp",
+      "min": 58.8889,
+      "max": 58.8911,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21",
+      "thresholds": [
+        {
+          "at": 75,
+          "color": "#FFC145"
+        },
+        {
+          "at": 85,
+          "color": "#FF3D2E"
+        }
+      ]
+    },
+    {
+      "type": "gauge",
+      "x": 420,
+      "y": 66,
+      "w": 184,
+      "thickness": 16,
+      "start": 270.0,
+      "sweep": 5.4,
+      "roundCaps": false,
+      "sensor": "gpuTemp",
+      "min": 61.1111,
+      "max": 61.1133,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21",
+      "thresholds": [
+        {
+          "at": 75,
+          "color": "#FFC145"
+        },
+        {
+          "at": 85,
+          "color": "#FF3D2E"
+        }
+      ]
+    },
+    {
+      "type": "gauge",
+      "x": 420,
+      "y": 66,
+      "w": 184,
+      "thickness": 16,
+      "start": 277.5,
+      "sweep": 5.4,
+      "roundCaps": false,
+      "sensor": "gpuTemp",
+      "min": 63.3333,
+      "max": 63.3356,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21",
+      "thresholds": [
+        {
+          "at": 75,
+          "color": "#FFC145"
+        },
+        {
+          "at": 85,
+          "color": "#FF3D2E"
+        }
+      ]
+    },
+    {
+      "type": "gauge",
+      "x": 420,
+      "y": 66,
+      "w": 184,
+      "thickness": 16,
+      "start": 285.0,
+      "sweep": 5.4,
+      "roundCaps": false,
+      "sensor": "gpuTemp",
+      "min": 65.5556,
+      "max": 65.5578,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21",
+      "thresholds": [
+        {
+          "at": 75,
+          "color": "#FFC145"
+        },
+        {
+          "at": 85,
+          "color": "#FF3D2E"
+        }
+      ]
+    },
+    {
+      "type": "gauge",
+      "x": 420,
+      "y": 66,
+      "w": 184,
+      "thickness": 16,
+      "start": 292.5,
+      "sweep": 5.4,
+      "roundCaps": false,
+      "sensor": "gpuTemp",
+      "min": 67.7778,
+      "max": 67.78,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21",
+      "thresholds": [
+        {
+          "at": 75,
+          "color": "#FFC145"
+        },
+        {
+          "at": 85,
+          "color": "#FF3D2E"
+        }
+      ]
+    },
+    {
+      "type": "gauge",
+      "x": 420,
+      "y": 66,
+      "w": 184,
+      "thickness": 16,
+      "start": 300.0,
+      "sweep": 5.4,
+      "roundCaps": false,
+      "sensor": "gpuTemp",
+      "min": 70.0,
+      "max": 70.0022,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21",
+      "thresholds": [
+        {
+          "at": 75,
+          "color": "#FFC145"
+        },
+        {
+          "at": 85,
+          "color": "#FF3D2E"
+        }
+      ]
+    },
+    {
+      "type": "gauge",
+      "x": 420,
+      "y": 66,
+      "w": 184,
+      "thickness": 16,
+      "start": 307.5,
+      "sweep": 5.4,
+      "roundCaps": false,
+      "sensor": "gpuTemp",
+      "min": 72.2222,
+      "max": 72.2244,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21",
+      "thresholds": [
+        {
+          "at": 75,
+          "color": "#FFC145"
+        },
+        {
+          "at": 85,
+          "color": "#FF3D2E"
+        }
+      ]
+    },
+    {
+      "type": "gauge",
+      "x": 420,
+      "y": 66,
+      "w": 184,
+      "thickness": 16,
+      "start": 315.0,
+      "sweep": 5.4,
+      "roundCaps": false,
+      "sensor": "gpuTemp",
+      "min": 74.4444,
+      "max": 74.4467,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21",
+      "thresholds": [
+        {
+          "at": 75,
+          "color": "#FFC145"
+        },
+        {
+          "at": 85,
+          "color": "#FF3D2E"
+        }
+      ]
+    },
+    {
+      "type": "gauge",
+      "x": 420,
+      "y": 66,
+      "w": 184,
+      "thickness": 16,
+      "start": 322.5,
+      "sweep": 5.4,
+      "roundCaps": false,
+      "sensor": "gpuTemp",
+      "min": 76.6667,
+      "max": 76.6689,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21",
+      "thresholds": [
+        {
+          "at": 75,
+          "color": "#FFC145"
+        },
+        {
+          "at": 85,
+          "color": "#FF3D2E"
+        }
+      ]
+    },
+    {
+      "type": "gauge",
+      "x": 420,
+      "y": 66,
+      "w": 184,
+      "thickness": 16,
+      "start": 330.0,
+      "sweep": 5.4,
+      "roundCaps": false,
+      "sensor": "gpuTemp",
+      "min": 78.8889,
+      "max": 78.8911,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21",
+      "thresholds": [
+        {
+          "at": 75,
+          "color": "#FFC145"
+        },
+        {
+          "at": 85,
+          "color": "#FF3D2E"
+        }
+      ]
+    },
+    {
+      "type": "gauge",
+      "x": 420,
+      "y": 66,
+      "w": 184,
+      "thickness": 16,
+      "start": 337.5,
+      "sweep": 5.4,
+      "roundCaps": false,
+      "sensor": "gpuTemp",
+      "min": 81.1111,
+      "max": 81.1133,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21",
+      "thresholds": [
+        {
+          "at": 75,
+          "color": "#FFC145"
+        },
+        {
+          "at": 85,
+          "color": "#FF3D2E"
+        }
+      ]
+    },
+    {
+      "type": "gauge",
+      "x": 420,
+      "y": 66,
+      "w": 184,
+      "thickness": 16,
+      "start": 345.0,
+      "sweep": 5.4,
+      "roundCaps": false,
+      "sensor": "gpuTemp",
+      "min": 83.3333,
+      "max": 83.3356,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21",
+      "thresholds": [
+        {
+          "at": 75,
+          "color": "#FFC145"
+        },
+        {
+          "at": 85,
+          "color": "#FF3D2E"
+        }
+      ]
+    },
+    {
+      "type": "gauge",
+      "x": 420,
+      "y": 66,
+      "w": 184,
+      "thickness": 16,
+      "start": 352.5,
+      "sweep": 5.4,
+      "roundCaps": false,
+      "sensor": "gpuTemp",
+      "min": 85.5556,
+      "max": 85.5578,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21",
+      "thresholds": [
+        {
+          "at": 75,
+          "color": "#FFC145"
+        },
+        {
+          "at": 85,
+          "color": "#FF3D2E"
+        }
+      ]
+    },
+    {
+      "type": "gauge",
+      "x": 420,
+      "y": 66,
+      "w": 184,
+      "thickness": 16,
+      "start": 360.0,
+      "sweep": 5.4,
+      "roundCaps": false,
+      "sensor": "gpuTemp",
+      "min": 87.7778,
+      "max": 87.78,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21",
+      "thresholds": [
+        {
+          "at": 75,
+          "color": "#FFC145"
+        },
+        {
+          "at": 85,
+          "color": "#FF3D2E"
+        }
+      ]
+    },
+    {
+      "type": "gauge",
+      "x": 420,
+      "y": 66,
+      "w": 184,
+      "thickness": 16,
+      "start": 367.5,
+      "sweep": 5.4,
+      "roundCaps": false,
+      "sensor": "gpuTemp",
+      "min": 90.0,
+      "max": 90.0022,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21",
+      "thresholds": [
+        {
+          "at": 75,
+          "color": "#FFC145"
+        },
+        {
+          "at": 85,
+          "color": "#FF3D2E"
+        }
+      ]
+    },
+    {
+      "type": "gauge",
+      "x": 420,
+      "y": 66,
+      "w": 184,
+      "thickness": 16,
+      "start": 375.0,
+      "sweep": 5.4,
+      "roundCaps": false,
+      "sensor": "gpuTemp",
+      "min": 92.2222,
+      "max": 92.2244,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21",
+      "thresholds": [
+        {
+          "at": 75,
+          "color": "#FFC145"
+        },
+        {
+          "at": 85,
+          "color": "#FF3D2E"
+        }
+      ]
+    },
+    {
+      "type": "gauge",
+      "x": 420,
+      "y": 66,
+      "w": 184,
+      "thickness": 16,
+      "start": 382.5,
+      "sweep": 5.4,
+      "roundCaps": false,
+      "sensor": "gpuTemp",
+      "min": 94.4444,
+      "max": 94.4467,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21",
+      "thresholds": [
+        {
+          "at": 75,
+          "color": "#FFC145"
+        },
+        {
+          "at": 85,
+          "color": "#FF3D2E"
+        }
+      ]
+    },
+    {
+      "type": "gauge",
+      "x": 420,
+      "y": 66,
+      "w": 184,
+      "thickness": 16,
+      "start": 390.0,
+      "sweep": 5.4,
+      "roundCaps": false,
+      "sensor": "gpuTemp",
+      "min": 96.6667,
+      "max": 96.6689,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21",
+      "thresholds": [
+        {
+          "at": 75,
+          "color": "#FFC145"
+        },
+        {
+          "at": 85,
+          "color": "#FF3D2E"
+        }
+      ]
+    },
+    {
+      "type": "gauge",
+      "x": 420,
+      "y": 66,
+      "w": 184,
+      "thickness": 16,
+      "start": 397.5,
+      "sweep": 5.4,
+      "roundCaps": false,
+      "sensor": "gpuTemp",
+      "min": 98.8889,
+      "max": 98.8911,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21",
+      "thresholds": [
+        {
+          "at": 75,
+          "color": "#FFC145"
+        },
+        {
+          "at": 85,
+          "color": "#FF3D2E"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "x": 420,
+      "y": 114,
+      "text": "{gpuTemp:0}",
+      "font": "Roboto Black",
+      "size": 40,
+      "color": "#F6EAE1",
+      "align": "center",
+      "w": 184
+    },
+    {
+      "type": "text",
+      "x": 420,
+      "y": 172,
+      "text": "°C",
+      "font": "Roboto Medium",
+      "size": 10,
+      "color": "#A08A7D",
+      "align": "center",
+      "w": 184
+    },
+    {
+      "type": "rect",
+      "x": 360,
+      "y": 266,
+      "w": 304,
+      "h": 44,
+      "color": "#251C17",
+      "radius": 6
+    },
+    {
+      "type": "text",
+      "x": 374,
+      "y": 272,
+      "text": "LOAD",
+      "font": "Roboto Medium",
+      "size": 9,
+      "color": "#F6EAE1"
+    },
+    {
+      "type": "text",
+      "x": 650,
+      "y": 268,
+      "text": "{gpuLoad:0} %",
+      "font": "Roboto Medium",
+      "size": 15,
+      "color": "#F6EAE1",
+      "align": "right"
+    },
+    {
+      "type": "bar",
+      "x": 374,
+      "y": 294,
+      "w": 276,
+      "h": 7,
+      "sensor": "gpuLoad",
+      "min": 0,
+      "max": 100,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21",
+      "radius": 3.5
+    },
+    {
+      "type": "rect",
+      "x": 360,
+      "y": 314,
+      "w": 304,
+      "h": 44,
+      "color": "#251C17",
+      "radius": 6
+    },
+    {
+      "type": "text",
+      "x": 374,
+      "y": 320,
+      "text": "CLOCK",
+      "font": "Roboto Medium",
+      "size": 9,
+      "color": "#F6EAE1"
+    },
+    {
+      "type": "text",
+      "x": 650,
+      "y": 316,
+      "text": "{gpuClock:0} MHz",
+      "font": "Roboto Medium",
+      "size": 15,
+      "color": "#F6EAE1",
+      "align": "right"
+    },
+    {
+      "type": "bar",
+      "x": 374,
+      "y": 342,
+      "w": 276,
+      "h": 7,
+      "sensor": "gpuClock",
+      "min": 0,
+      "max": 3200,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21",
+      "radius": 3.5
+    },
+    {
+      "type": "rect",
+      "x": 360,
+      "y": 362,
+      "w": 304,
+      "h": 44,
+      "color": "#251C17",
+      "radius": 6
+    },
+    {
+      "type": "text",
+      "x": 374,
+      "y": 368,
+      "text": "POWER",
+      "font": "Roboto Medium",
+      "size": 9,
+      "color": "#F6EAE1"
+    },
+    {
+      "type": "text",
+      "x": 650,
+      "y": 364,
+      "text": "{gpuPower:0} W",
+      "font": "Roboto Medium",
+      "size": 15,
+      "color": "#F6EAE1",
+      "align": "right"
+    },
+    {
+      "type": "bar",
+      "x": 374,
+      "y": 390,
+      "w": 276,
+      "h": 7,
+      "sensor": "gpuPower",
+      "min": 0,
+      "max": 600,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21",
+      "radius": 3.5
+    },
+    {
+      "type": "rect",
+      "x": 360,
+      "y": 410,
+      "w": 304,
+      "h": 44,
+      "color": "#251C17",
+      "radius": 6
+    },
+    {
+      "type": "text",
+      "x": 374,
+      "y": 416,
+      "text": "VRAM",
+      "font": "Roboto Medium",
+      "size": 9,
+      "color": "#F6EAE1"
+    },
+    {
+      "type": "text",
+      "x": 650,
+      "y": 412,
+      "text": "{vramUsed:0.0} / {vramTotal:0} GB",
+      "font": "Roboto Medium",
+      "size": 15,
+      "color": "#F6EAE1",
+      "align": "right"
+    },
+    {
+      "type": "bar",
+      "x": 374,
+      "y": 438,
+      "w": 276,
+      "h": 7,
+      "sensor": "vramLoad",
+      "min": 0,
+      "max": 100,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21",
+      "radius": 3.5
+    },
+    {
+      "type": "rect",
+      "x": 684,
+      "y": 12,
+      "w": 328,
+      "h": 450,
+      "color": "#33261F",
+      "radius": 10
+    },
+    {
+      "type": "rect",
+      "x": 687,
+      "y": 15,
+      "w": 322,
+      "h": 444,
+      "color": "#1B1411",
+      "radius": 8
+    },
+    {
+      "type": "rect",
+      "x": 708,
+      "y": 20,
+      "w": 280,
+      "h": 34,
+      "color": "#251C17",
+      "radius": 17
+    },
+    {
+      "type": "rect",
+      "x": 696,
+      "y": 32,
+      "w": 10,
+      "h": 10,
+      "color": "#FF7A1A",
+      "radius": 5
+    },
+    {
+      "type": "rect",
+      "x": 990,
+      "y": 32,
+      "w": 10,
+      "h": 10,
+      "color": "#FF7A1A",
+      "radius": 5
+    },
+    {
+      "type": "text",
+      "x": 724,
+      "y": 24,
+      "text": "FPS",
+      "font": "Roboto Black",
+      "size": 15,
+      "color": "#F6EAE1"
+    },
+    {
+      "type": "text",
+      "x": 776,
+      "y": 30,
+      "text": "{HOSTNAME}",
+      "font": "Roboto Medium",
+      "size": 9,
+      "color": "#A08A7D"
+    },
+    {
+      "type": "rect",
+      "x": 708,
+      "y": 62,
+      "w": 280,
+      "h": 196,
+      "color": "#251C17",
+      "radius": 8
+    },
+    {
+      "type": "rect",
+      "x": 694,
+      "y": 100,
+      "w": 4,
+      "h": 120,
+      "color": "#FF7A1A",
+      "radius": 2
+    },
+    {
+      "type": "rect",
+      "x": 998,
+      "y": 100,
+      "w": 4,
+      "h": 120,
+      "color": "#FF7A1A",
+      "radius": 2
+    },
+    {
+      "type": "gauge",
+      "x": 778,
+      "y": 88,
+      "w": 140,
+      "thickness": 2,
+      "start": 135,
+      "sweep": 360,
+      "roundCaps": false,
+      "sensor": null,
+      "min": 0,
+      "max": 1,
+      "color": "#33261F",
+      "bg": "#33261F"
+    },
+    {
+      "type": "gauge",
+      "x": 756,
+      "y": 66,
+      "w": 184,
+      "thickness": 16,
+      "start": 135.0,
+      "sweep": 5.4,
+      "roundCaps": false,
+      "sensor": "fps",
+      "min": 3.3333,
+      "max": 3.34,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21"
+    },
+    {
+      "type": "gauge",
+      "x": 756,
+      "y": 66,
+      "w": 184,
+      "thickness": 16,
+      "start": 142.5,
+      "sweep": 5.4,
+      "roundCaps": false,
+      "sensor": "fps",
+      "min": 10.0,
+      "max": 10.0067,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21"
+    },
+    {
+      "type": "gauge",
+      "x": 756,
+      "y": 66,
+      "w": 184,
+      "thickness": 16,
+      "start": 150.0,
+      "sweep": 5.4,
+      "roundCaps": false,
+      "sensor": "fps",
+      "min": 16.6667,
+      "max": 16.6733,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21"
+    },
+    {
+      "type": "gauge",
+      "x": 756,
+      "y": 66,
+      "w": 184,
+      "thickness": 16,
+      "start": 157.5,
+      "sweep": 5.4,
+      "roundCaps": false,
+      "sensor": "fps",
+      "min": 23.3333,
+      "max": 23.34,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21"
+    },
+    {
+      "type": "gauge",
+      "x": 756,
+      "y": 66,
+      "w": 184,
+      "thickness": 16,
+      "start": 165.0,
+      "sweep": 5.4,
+      "roundCaps": false,
+      "sensor": "fps",
+      "min": 30.0,
+      "max": 30.0067,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21"
+    },
+    {
+      "type": "gauge",
+      "x": 756,
+      "y": 66,
+      "w": 184,
+      "thickness": 16,
+      "start": 172.5,
+      "sweep": 5.4,
+      "roundCaps": false,
+      "sensor": "fps",
+      "min": 36.6667,
+      "max": 36.6733,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21"
+    },
+    {
+      "type": "gauge",
+      "x": 756,
+      "y": 66,
+      "w": 184,
+      "thickness": 16,
+      "start": 180.0,
+      "sweep": 5.4,
+      "roundCaps": false,
+      "sensor": "fps",
+      "min": 43.3333,
+      "max": 43.34,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21"
+    },
+    {
+      "type": "gauge",
+      "x": 756,
+      "y": 66,
+      "w": 184,
+      "thickness": 16,
+      "start": 187.5,
+      "sweep": 5.4,
+      "roundCaps": false,
+      "sensor": "fps",
+      "min": 50.0,
+      "max": 50.0067,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21"
+    },
+    {
+      "type": "gauge",
+      "x": 756,
+      "y": 66,
+      "w": 184,
+      "thickness": 16,
+      "start": 195.0,
+      "sweep": 5.4,
+      "roundCaps": false,
+      "sensor": "fps",
+      "min": 56.6667,
+      "max": 56.6733,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21"
+    },
+    {
+      "type": "gauge",
+      "x": 756,
+      "y": 66,
+      "w": 184,
+      "thickness": 16,
+      "start": 202.5,
+      "sweep": 5.4,
+      "roundCaps": false,
+      "sensor": "fps",
+      "min": 63.3333,
+      "max": 63.34,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21"
+    },
+    {
+      "type": "gauge",
+      "x": 756,
+      "y": 66,
+      "w": 184,
+      "thickness": 16,
+      "start": 210.0,
+      "sweep": 5.4,
+      "roundCaps": false,
+      "sensor": "fps",
+      "min": 70.0,
+      "max": 70.0067,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21"
+    },
+    {
+      "type": "gauge",
+      "x": 756,
+      "y": 66,
+      "w": 184,
+      "thickness": 16,
+      "start": 217.5,
+      "sweep": 5.4,
+      "roundCaps": false,
+      "sensor": "fps",
+      "min": 76.6667,
+      "max": 76.6733,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21"
+    },
+    {
+      "type": "gauge",
+      "x": 756,
+      "y": 66,
+      "w": 184,
+      "thickness": 16,
+      "start": 225.0,
+      "sweep": 5.4,
+      "roundCaps": false,
+      "sensor": "fps",
+      "min": 83.3333,
+      "max": 83.34,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21"
+    },
+    {
+      "type": "gauge",
+      "x": 756,
+      "y": 66,
+      "w": 184,
+      "thickness": 16,
+      "start": 232.5,
+      "sweep": 5.4,
+      "roundCaps": false,
+      "sensor": "fps",
+      "min": 90.0,
+      "max": 90.0067,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21"
+    },
+    {
+      "type": "gauge",
+      "x": 756,
+      "y": 66,
+      "w": 184,
+      "thickness": 16,
+      "start": 240.0,
+      "sweep": 5.4,
+      "roundCaps": false,
+      "sensor": "fps",
+      "min": 96.6667,
+      "max": 96.6733,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21"
+    },
+    {
+      "type": "gauge",
+      "x": 756,
+      "y": 66,
+      "w": 184,
+      "thickness": 16,
+      "start": 247.5,
+      "sweep": 5.4,
+      "roundCaps": false,
+      "sensor": "fps",
+      "min": 103.3333,
+      "max": 103.34,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21"
+    },
+    {
+      "type": "gauge",
+      "x": 756,
+      "y": 66,
+      "w": 184,
+      "thickness": 16,
+      "start": 255.0,
+      "sweep": 5.4,
+      "roundCaps": false,
+      "sensor": "fps",
+      "min": 110.0,
+      "max": 110.0067,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21"
+    },
+    {
+      "type": "gauge",
+      "x": 756,
+      "y": 66,
+      "w": 184,
+      "thickness": 16,
+      "start": 262.5,
+      "sweep": 5.4,
+      "roundCaps": false,
+      "sensor": "fps",
+      "min": 116.6667,
+      "max": 116.6733,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21"
+    },
+    {
+      "type": "gauge",
+      "x": 756,
+      "y": 66,
+      "w": 184,
+      "thickness": 16,
+      "start": 270.0,
+      "sweep": 5.4,
+      "roundCaps": false,
+      "sensor": "fps",
+      "min": 123.3333,
+      "max": 123.34,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21"
+    },
+    {
+      "type": "gauge",
+      "x": 756,
+      "y": 66,
+      "w": 184,
+      "thickness": 16,
+      "start": 277.5,
+      "sweep": 5.4,
+      "roundCaps": false,
+      "sensor": "fps",
+      "min": 130.0,
+      "max": 130.0067,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21"
+    },
+    {
+      "type": "gauge",
+      "x": 756,
+      "y": 66,
+      "w": 184,
+      "thickness": 16,
+      "start": 285.0,
+      "sweep": 5.4,
+      "roundCaps": false,
+      "sensor": "fps",
+      "min": 136.6667,
+      "max": 136.6733,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21"
+    },
+    {
+      "type": "gauge",
+      "x": 756,
+      "y": 66,
+      "w": 184,
+      "thickness": 16,
+      "start": 292.5,
+      "sweep": 5.4,
+      "roundCaps": false,
+      "sensor": "fps",
+      "min": 143.3333,
+      "max": 143.34,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21"
+    },
+    {
+      "type": "gauge",
+      "x": 756,
+      "y": 66,
+      "w": 184,
+      "thickness": 16,
+      "start": 300.0,
+      "sweep": 5.4,
+      "roundCaps": false,
+      "sensor": "fps",
+      "min": 150.0,
+      "max": 150.0067,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21"
+    },
+    {
+      "type": "gauge",
+      "x": 756,
+      "y": 66,
+      "w": 184,
+      "thickness": 16,
+      "start": 307.5,
+      "sweep": 5.4,
+      "roundCaps": false,
+      "sensor": "fps",
+      "min": 156.6667,
+      "max": 156.6733,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21"
+    },
+    {
+      "type": "gauge",
+      "x": 756,
+      "y": 66,
+      "w": 184,
+      "thickness": 16,
+      "start": 315.0,
+      "sweep": 5.4,
+      "roundCaps": false,
+      "sensor": "fps",
+      "min": 163.3333,
+      "max": 163.34,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21"
+    },
+    {
+      "type": "gauge",
+      "x": 756,
+      "y": 66,
+      "w": 184,
+      "thickness": 16,
+      "start": 322.5,
+      "sweep": 5.4,
+      "roundCaps": false,
+      "sensor": "fps",
+      "min": 170.0,
+      "max": 170.0067,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21"
+    },
+    {
+      "type": "gauge",
+      "x": 756,
+      "y": 66,
+      "w": 184,
+      "thickness": 16,
+      "start": 330.0,
+      "sweep": 5.4,
+      "roundCaps": false,
+      "sensor": "fps",
+      "min": 176.6667,
+      "max": 176.6733,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21"
+    },
+    {
+      "type": "gauge",
+      "x": 756,
+      "y": 66,
+      "w": 184,
+      "thickness": 16,
+      "start": 337.5,
+      "sweep": 5.4,
+      "roundCaps": false,
+      "sensor": "fps",
+      "min": 183.3333,
+      "max": 183.34,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21"
+    },
+    {
+      "type": "gauge",
+      "x": 756,
+      "y": 66,
+      "w": 184,
+      "thickness": 16,
+      "start": 345.0,
+      "sweep": 5.4,
+      "roundCaps": false,
+      "sensor": "fps",
+      "min": 190.0,
+      "max": 190.0067,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21"
+    },
+    {
+      "type": "gauge",
+      "x": 756,
+      "y": 66,
+      "w": 184,
+      "thickness": 16,
+      "start": 352.5,
+      "sweep": 5.4,
+      "roundCaps": false,
+      "sensor": "fps",
+      "min": 196.6667,
+      "max": 196.6733,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21"
+    },
+    {
+      "type": "gauge",
+      "x": 756,
+      "y": 66,
+      "w": 184,
+      "thickness": 16,
+      "start": 360.0,
+      "sweep": 5.4,
+      "roundCaps": false,
+      "sensor": "fps",
+      "min": 203.3333,
+      "max": 203.34,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21"
+    },
+    {
+      "type": "gauge",
+      "x": 756,
+      "y": 66,
+      "w": 184,
+      "thickness": 16,
+      "start": 367.5,
+      "sweep": 5.4,
+      "roundCaps": false,
+      "sensor": "fps",
+      "min": 210.0,
+      "max": 210.0067,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21"
+    },
+    {
+      "type": "gauge",
+      "x": 756,
+      "y": 66,
+      "w": 184,
+      "thickness": 16,
+      "start": 375.0,
+      "sweep": 5.4,
+      "roundCaps": false,
+      "sensor": "fps",
+      "min": 216.6667,
+      "max": 216.6733,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21"
+    },
+    {
+      "type": "gauge",
+      "x": 756,
+      "y": 66,
+      "w": 184,
+      "thickness": 16,
+      "start": 382.5,
+      "sweep": 5.4,
+      "roundCaps": false,
+      "sensor": "fps",
+      "min": 223.3333,
+      "max": 223.34,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21"
+    },
+    {
+      "type": "gauge",
+      "x": 756,
+      "y": 66,
+      "w": 184,
+      "thickness": 16,
+      "start": 390.0,
+      "sweep": 5.4,
+      "roundCaps": false,
+      "sensor": "fps",
+      "min": 230.0,
+      "max": 230.0067,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21"
+    },
+    {
+      "type": "gauge",
+      "x": 756,
+      "y": 66,
+      "w": 184,
+      "thickness": 16,
+      "start": 397.5,
+      "sweep": 5.4,
+      "roundCaps": false,
+      "sensor": "fps",
+      "min": 236.6667,
+      "max": 236.6733,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21"
+    },
+    {
+      "type": "text",
+      "x": 756,
+      "y": 114,
+      "text": "{fps:0}",
+      "font": "Roboto Black",
+      "size": 40,
+      "color": "#F6EAE1",
+      "align": "center",
+      "w": 184
+    },
+    {
+      "type": "text",
+      "x": 756,
+      "y": 172,
+      "text": "FPS",
+      "font": "Roboto Medium",
+      "size": 10,
+      "color": "#A08A7D",
+      "align": "center",
+      "w": 184
+    },
+    {
+      "type": "rect",
+      "x": 696,
+      "y": 266,
+      "w": 304,
+      "h": 44,
+      "color": "#251C17",
+      "radius": 6
+    },
+    {
+      "type": "text",
+      "x": 710,
+      "y": 272,
+      "text": "DOWNLOAD",
+      "font": "Roboto Medium",
+      "size": 9,
+      "color": "#F6EAE1"
+    },
+    {
+      "type": "text",
+      "x": 986,
+      "y": 268,
+      "text": "{netDown:0.0} Mbps",
+      "font": "Roboto Medium",
+      "size": 15,
+      "color": "#F6EAE1",
+      "align": "right"
+    },
+    {
+      "type": "bar",
+      "x": 710,
+      "y": 294,
+      "w": 276,
+      "h": 7,
+      "sensor": "netDown",
+      "min": 0,
+      "max": 1000,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21",
+      "radius": 3.5
+    },
+    {
+      "type": "rect",
+      "x": 696,
+      "y": 314,
+      "w": 304,
+      "h": 44,
+      "color": "#251C17",
+      "radius": 6
+    },
+    {
+      "type": "text",
+      "x": 710,
+      "y": 320,
+      "text": "UPLOAD",
+      "font": "Roboto Medium",
+      "size": 9,
+      "color": "#F6EAE1"
+    },
+    {
+      "type": "text",
+      "x": 986,
+      "y": 316,
+      "text": "{netUp:0.0} Mbps",
+      "font": "Roboto Medium",
+      "size": 15,
+      "color": "#F6EAE1",
+      "align": "right"
+    },
+    {
+      "type": "bar",
+      "x": 710,
+      "y": 342,
+      "w": 276,
+      "h": 7,
+      "sensor": "netUp",
+      "min": 0,
+      "max": 100,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21",
+      "radius": 3.5
+    },
+    {
+      "type": "rect",
+      "x": 696,
+      "y": 362,
+      "w": 304,
+      "h": 92,
+      "color": "#251C17",
+      "radius": 6
+    },
+    {
+      "type": "rect",
+      "x": 768,
+      "y": 368,
+      "w": 160,
+      "h": 24,
+      "color": "#1B1411",
+      "radius": 12
+    },
+    {
+      "type": "text",
+      "x": 768,
+      "y": 371,
+      "text": "SYSTEM",
+      "font": "Roboto Black",
+      "size": 11,
+      "color": "#F6EAE1",
+      "align": "center",
+      "w": 160
+    },
+    {
+      "type": "text",
+      "x": 696,
+      "y": 394,
+      "text": "{time:HH:mm:ss}",
+      "font": "Roboto Black",
+      "size": 22,
+      "color": "#FFC145",
+      "align": "center",
+      "w": 304
+    },
+    {
+      "type": "text",
+      "x": 696,
+      "y": 428,
+      "text": "{date:dddd d MMMM yyyy}",
+      "font": "Roboto Medium",
+      "size": 10,
+      "color": "#A08A7D",
+      "align": "center",
+      "w": 304
+    },
+    {
+      "type": "rect",
+      "x": 12,
+      "y": 470,
+      "w": 244,
+      "h": 110,
+      "color": "#33261F",
+      "radius": 10
+    },
+    {
+      "type": "rect",
+      "x": 15,
+      "y": 473,
+      "w": 238,
+      "h": 104,
+      "color": "#1B1411",
+      "radius": 8
+    },
+    {
+      "type": "rect",
+      "x": 20,
+      "y": 490,
+      "w": 4,
+      "h": 70,
+      "color": "#FF7A1A",
+      "radius": 2
+    },
+    {
+      "type": "rect",
+      "x": 244,
+      "y": 490,
+      "w": 4,
+      "h": 70,
+      "color": "#FF7A1A",
+      "radius": 2
+    },
+    {
+      "type": "rect",
+      "x": 32,
+      "y": 480,
+      "w": 204,
+      "h": 44,
+      "color": "#251C17",
+      "radius": 6
+    },
+    {
+      "type": "text",
+      "x": 46,
+      "y": 486,
+      "text": "WATER TEMP",
+      "font": "Roboto Medium",
+      "size": 9,
+      "color": "#F6EAE1"
+    },
+    {
+      "type": "text",
+      "x": 222,
+      "y": 482,
+      "text": "{water:0.0} °C",
+      "font": "Roboto Medium",
+      "size": 15,
+      "color": "#F6EAE1",
+      "align": "right"
+    },
+    {
+      "type": "bar",
+      "x": 46,
+      "y": 508,
+      "w": 176,
+      "h": 7,
+      "sensor": "water",
+      "min": 20,
+      "max": 45,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21",
+      "radius": 3.5,
+      "thresholds": [
+        {
+          "at": 38,
+          "color": "#FFC145"
+        },
+        {
+          "at": 42,
+          "color": "#FF3D2E"
+        }
+      ]
+    },
+    {
+      "type": "rect",
+      "x": 32,
+      "y": 528,
+      "w": 204,
+      "h": 44,
+      "color": "#251C17",
+      "radius": 6
+    },
+    {
+      "type": "text",
+      "x": 46,
+      "y": 534,
+      "text": "FLOW RATE",
+      "font": "Roboto Medium",
+      "size": 9,
+      "color": "#F6EAE1"
+    },
+    {
+      "type": "text",
+      "x": 222,
+      "y": 530,
+      "text": "{flow:0} L/h",
+      "font": "Roboto Medium",
+      "size": 15,
+      "color": "#F6EAE1",
+      "align": "right"
+    },
+    {
+      "type": "bar",
+      "x": 46,
+      "y": 556,
+      "w": 176,
+      "h": 7,
+      "sensor": "flow",
+      "min": 0,
+      "max": 200,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21",
+      "radius": 3.5
+    },
+    {
+      "type": "rect",
+      "x": 264,
+      "y": 470,
+      "w": 244,
+      "h": 110,
+      "color": "#33261F",
+      "radius": 10
+    },
+    {
+      "type": "rect",
+      "x": 267,
+      "y": 473,
+      "w": 238,
+      "h": 104,
+      "color": "#1B1411",
+      "radius": 8
+    },
+    {
+      "type": "rect",
+      "x": 272,
+      "y": 490,
+      "w": 4,
+      "h": 70,
+      "color": "#FF7A1A",
+      "radius": 2
+    },
+    {
+      "type": "rect",
+      "x": 496,
+      "y": 490,
+      "w": 4,
+      "h": 70,
+      "color": "#FF7A1A",
+      "radius": 2
+    },
+    {
+      "type": "rect",
+      "x": 284,
+      "y": 480,
+      "w": 204,
+      "h": 44,
+      "color": "#251C17",
+      "radius": 6
+    },
+    {
+      "type": "text",
+      "x": 298,
+      "y": 486,
+      "text": "PUMP",
+      "font": "Roboto Medium",
+      "size": 9,
+      "color": "#F6EAE1"
+    },
+    {
+      "type": "text",
+      "x": 474,
+      "y": 482,
+      "text": "{pump:0} RPM",
+      "font": "Roboto Medium",
+      "size": 15,
+      "color": "#F6EAE1",
+      "align": "right"
+    },
+    {
+      "type": "bar",
+      "x": 298,
+      "y": 508,
+      "w": 176,
+      "h": 7,
+      "sensor": "pump",
+      "min": 0,
+      "max": 4800,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21",
+      "radius": 3.5
+    },
+    {
+      "type": "rect",
+      "x": 284,
+      "y": 528,
+      "w": 204,
+      "h": 44,
+      "color": "#251C17",
+      "radius": 6
+    },
+    {
+      "type": "text",
+      "x": 298,
+      "y": 534,
+      "text": "FANS",
+      "font": "Roboto Medium",
+      "size": 9,
+      "color": "#F6EAE1"
+    },
+    {
+      "type": "text",
+      "x": 474,
+      "y": 530,
+      "text": "{fan:0} RPM",
+      "font": "Roboto Medium",
+      "size": 15,
+      "color": "#F6EAE1",
+      "align": "right"
+    },
+    {
+      "type": "bar",
+      "x": 298,
+      "y": 556,
+      "w": 176,
+      "h": 7,
+      "sensor": "fan",
+      "min": 0,
+      "max": 2000,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21",
+      "radius": 3.5
+    },
+    {
+      "type": "rect",
+      "x": 516,
+      "y": 470,
+      "w": 244,
+      "h": 110,
+      "color": "#33261F",
+      "radius": 10
+    },
+    {
+      "type": "rect",
+      "x": 519,
+      "y": 473,
+      "w": 238,
+      "h": 104,
+      "color": "#1B1411",
+      "radius": 8
+    },
+    {
+      "type": "rect",
+      "x": 524,
+      "y": 490,
+      "w": 4,
+      "h": 70,
+      "color": "#FF7A1A",
+      "radius": 2
+    },
+    {
+      "type": "rect",
+      "x": 748,
+      "y": 490,
+      "w": 4,
+      "h": 70,
+      "color": "#FF7A1A",
+      "radius": 2
+    },
+    {
+      "type": "rect",
+      "x": 536,
+      "y": 480,
+      "w": 204,
+      "h": 92,
+      "color": "#251C17",
+      "radius": 6
+    },
+    {
+      "type": "text",
+      "x": 550,
+      "y": 486,
+      "text": "12V PINS · A",
+      "font": "Roboto Medium",
+      "size": 9,
+      "color": "#F6EAE1"
+    },
+    {
+      "type": "bar",
+      "x": 552,
+      "y": 504,
+      "w": 20,
+      "h": 48,
+      "sensor": "pin1",
+      "min": 0,
+      "max": 12,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21",
+      "radius": 3,
+      "thresholds": [
+        {
+          "at": 8,
+          "color": "#FFC145"
+        },
+        {
+          "at": 9.5,
+          "color": "#FF3D2E"
+        }
+      ],
+      "vertical": true
+    },
+    {
+      "type": "text",
+      "x": 547,
+      "y": 554,
+      "text": "{pin1:0.0}",
+      "font": "Roboto",
+      "size": 7,
+      "color": "#A08A7D",
+      "align": "center",
+      "w": 30
+    },
+    {
+      "type": "bar",
+      "x": 582,
+      "y": 504,
+      "w": 20,
+      "h": 48,
+      "sensor": "pin2",
+      "min": 0,
+      "max": 12,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21",
+      "radius": 3,
+      "thresholds": [
+        {
+          "at": 8,
+          "color": "#FFC145"
+        },
+        {
+          "at": 9.5,
+          "color": "#FF3D2E"
+        }
+      ],
+      "vertical": true
+    },
+    {
+      "type": "text",
+      "x": 577,
+      "y": 554,
+      "text": "{pin2:0.0}",
+      "font": "Roboto",
+      "size": 7,
+      "color": "#A08A7D",
+      "align": "center",
+      "w": 30
+    },
+    {
+      "type": "bar",
+      "x": 612,
+      "y": 504,
+      "w": 20,
+      "h": 48,
+      "sensor": "pin3",
+      "min": 0,
+      "max": 12,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21",
+      "radius": 3,
+      "thresholds": [
+        {
+          "at": 8,
+          "color": "#FFC145"
+        },
+        {
+          "at": 9.5,
+          "color": "#FF3D2E"
+        }
+      ],
+      "vertical": true
+    },
+    {
+      "type": "text",
+      "x": 607,
+      "y": 554,
+      "text": "{pin3:0.0}",
+      "font": "Roboto",
+      "size": 7,
+      "color": "#A08A7D",
+      "align": "center",
+      "w": 30
+    },
+    {
+      "type": "bar",
+      "x": 642,
+      "y": 504,
+      "w": 20,
+      "h": 48,
+      "sensor": "pin4",
+      "min": 0,
+      "max": 12,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21",
+      "radius": 3,
+      "thresholds": [
+        {
+          "at": 8,
+          "color": "#FFC145"
+        },
+        {
+          "at": 9.5,
+          "color": "#FF3D2E"
+        }
+      ],
+      "vertical": true
+    },
+    {
+      "type": "text",
+      "x": 637,
+      "y": 554,
+      "text": "{pin4:0.0}",
+      "font": "Roboto",
+      "size": 7,
+      "color": "#A08A7D",
+      "align": "center",
+      "w": 30
+    },
+    {
+      "type": "bar",
+      "x": 672,
+      "y": 504,
+      "w": 20,
+      "h": 48,
+      "sensor": "pin5",
+      "min": 0,
+      "max": 12,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21",
+      "radius": 3,
+      "thresholds": [
+        {
+          "at": 8,
+          "color": "#FFC145"
+        },
+        {
+          "at": 9.5,
+          "color": "#FF3D2E"
+        }
+      ],
+      "vertical": true
+    },
+    {
+      "type": "text",
+      "x": 667,
+      "y": 554,
+      "text": "{pin5:0.0}",
+      "font": "Roboto",
+      "size": 7,
+      "color": "#A08A7D",
+      "align": "center",
+      "w": 30
+    },
+    {
+      "type": "bar",
+      "x": 702,
+      "y": 504,
+      "w": 20,
+      "h": 48,
+      "sensor": "pin6",
+      "min": 0,
+      "max": 12,
+      "color": "#FF7A1A",
+      "bg": "#3A2A21",
+      "radius": 3,
+      "thresholds": [
+        {
+          "at": 8,
+          "color": "#FFC145"
+        },
+        {
+          "at": 9.5,
+          "color": "#FF3D2E"
+        }
+      ],
+      "vertical": true
+    },
+    {
+      "type": "text",
+      "x": 697,
+      "y": 554,
+      "text": "{pin6:0.0}",
+      "font": "Roboto",
+      "size": 7,
+      "color": "#A08A7D",
+      "align": "center",
+      "w": 30
+    },
+    {
+      "type": "rect",
+      "x": 768,
+      "y": 470,
+      "w": 244,
+      "h": 110,
+      "color": "#33261F",
+      "radius": 10
+    },
+    {
+      "type": "rect",
+      "x": 771,
+      "y": 473,
+      "w": 238,
+      "h": 104,
+      "color": "#1B1411",
+      "radius": 8
+    },
+    {
+      "type": "rect",
+      "x": 776,
+      "y": 490,
+      "w": 4,
+      "h": 70,
+      "color": "#FF7A1A",
+      "radius": 2
+    },
+    {
+      "type": "rect",
+      "x": 1000,
+      "y": 490,
+      "w": 4,
+      "h": 70,
+      "color": "#FF7A1A",
+      "radius": 2
+    },
+    {
+      "type": "rect",
+      "x": 788,
+      "y": 480,
+      "w": 204,
+      "h": 44,
+      "color": "#251C17",
+      "radius": 6
+    },
+    {
+      "type": "text",
+      "x": 802,
+      "y": 486,
+      "text": "IPv4",
+      "font": "Roboto Medium",
+      "size": 9,
+      "color": "#A08A7D"
+    },
+    {
+      "type": "text",
+      "x": 802,
+      "y": 501,
+      "text": "{LOCALIP}",
+      "font": "Roboto Medium",
+      "size": 11,
+      "color": "#F6EAE1"
+    },
+    {
+      "type": "rect",
+      "x": 788,
+      "y": 528,
+      "w": 204,
+      "h": 44,
+      "color": "#251C17",
+      "radius": 6
+    },
+    {
+      "type": "text",
+      "x": 802,
+      "y": 534,
+      "text": "IPv6",
+      "font": "Roboto Medium",
+      "size": 9,
+      "color": "#A08A7D"
+    },
+    {
+      "type": "text",
+      "x": 802,
+      "y": 549,
+      "text": "{LOCALIP6}",
+      "font": "Roboto Medium",
+      "size": 11,
+      "color": "#F6EAE1"
+    }
+  ]
+}

@@ -1,0 +1,50 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <!-- WigiDash Manager runs on .NET Framework 4.7.2 and loads widgets as plain class libraries. -->
+    <TargetFramework>net472</TargetFramework>
+    <!-- The Manager expects <WidgetGuid>\<WidgetGuid>.dll, so the assembly is named after the widget GUID. -->
+    <AssemblyName>56507051-FDDD-447B-B59B-81D78C7CD961</AssemblyName>
+    <RootNamespace>WigiPanel</RootNamespace>
+    <LangVersion>latest</LangVersion>
+    <Version>0.1.0</Version>
+    <Product>WigiPanel</Product>
+    <Description>Free-form, JSON-driven sensor panel widget for G.Skill WigiDash</Description>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <WigiDashDir Condition="'$(WigiDashDir)' == ''">C:\Program Files (x86)\G.SKILL\WigiDash Manager</WigiDashDir>
+    <!-- Without WigiDash Manager installed (CI, forks), compile against the API stub in stubs/ instead. -->
+    <UseFrameworkStub Condition="'$(UseFrameworkStub)' == '' and !Exists('$(WigiDashDir)\WigiDashWidgetFramework.dll')">true</UseFrameworkStub>
+  </PropertyGroup>
+
+  <!-- WigiDashWidgetFramework is provided by WigiDash Manager at runtime; never copy it next to the widget. -->
+  <ItemGroup Condition="'$(UseFrameworkStub)' != 'true'">
+    <Reference Include="WigiDashWidgetFramework">
+      <HintPath>$(WigiDashDir)\WigiDashWidgetFramework.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup Condition="'$(UseFrameworkStub)' == 'true'">
+    <ProjectReference Include="..\..\stubs\WigiDashWidgetFramework\WigiDashWidgetFramework.csproj">
+      <Private>false</Private>
+    </ProjectReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="WindowsBase" />
+    <Reference Include="System.Xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="all" />
+  </ItemGroup>
+
+</Project>

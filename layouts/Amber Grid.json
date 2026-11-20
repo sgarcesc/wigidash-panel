@@ -1,0 +1,1108 @@
+{
+  "name": "Amber Grid",
+  "canvas": {
+    "width": 1024,
+    "height": 600,
+    "background": "#0B0A09"
+  },
+  "refreshMs": 1000,
+  "sensors": {
+    "cpuTemp": {
+      "name": "^CPU$",
+      "source": "^CPU \\[#0\\]",
+      "unit": "C",
+      "demo": 52
+    },
+    "cpuClock": {
+      "name": "^Core \\d+ Clock$",
+      "source": "^CPU \\[#0\\]",
+      "aggregate": "avg",
+      "demo": 5225
+    },
+    "cpuPower": {
+      "name": "^CPU Package Power$",
+      "demo": 63.4
+    },
+    "cpuLoad": {
+      "name": "^Total CPU Usage$",
+      "demo": 24
+    },
+    "memUsed": {
+      "name": "^Physical Memory Used$",
+      "scale": 0.0009765625,
+      "demo": 17.4
+    },
+    "memTotal": {
+      "name": "^Physical Memory (Used|Available)$",
+      "aggregate": "sum",
+      "scale": 0.0009765625,
+      "demo": 61.7
+    },
+    "memLoad": {
+      "name": "^Physical Memory Load$",
+      "demo": 28
+    },
+    "gpuTemp": {
+      "name": "^GPU Temperature$",
+      "source": "^GPU \\[#0\\]",
+      "demo": 61
+    },
+    "gpuClock": {
+      "name": "^GPU Clock$",
+      "source": "^GPU \\[#0\\]",
+      "demo": 2655
+    },
+    "gpuPower": {
+      "name": "^GPU Power$",
+      "source": "^GPU \\[#0\\]",
+      "unit": "^W$",
+      "demo": 412
+    },
+    "gpuLoad": {
+      "name": "^GPU Core Load$",
+      "source": "^GPU \\[#0\\]",
+      "demo": 87
+    },
+    "vramUsed": {
+      "name": "^GPU Memory Allocated$",
+      "source": "^GPU \\[#0\\]",
+      "scale": 0.0009765625,
+      "demo": 11.6
+    },
+    "vramTotal": {
+      "name": "^GPU Memory (Allocated|Available)$",
+      "source": "^GPU \\[#0\\]",
+      "aggregate": "sum",
+      "scale": 0.0009765625,
+      "demo": 31.8
+    },
+    "vramLoad": {
+      "name": "^GPU Memory Usage$",
+      "source": "^GPU \\[#0\\]",
+      "unit": "%",
+      "demo": 36
+    },
+    "fps": {
+      "name": "^Framerate Presented$",
+      "source": "^PresentMon",
+      "staleMs": 3000,
+      "demo": 144
+    },
+    "pump": {
+      "name": "^Fan 4$",
+      "source": "Aqua Computer Octo",
+      "unit": "RPM",
+      "demo": 2750
+    },
+    "water": {
+      "name": "^Temperature 4$",
+      "source": "Aqua Computer Octo",
+      "demo": 31.2
+    },
+    "fan": {
+      "name": "^Fan 1$",
+      "source": "Aqua Computer Octo",
+      "unit": "RPM",
+      "demo": 860
+    },
+    "flow": {
+      "name": "^Flow$",
+      "source": "Aqua Computer Octo",
+      "demo": 94
+    },
+    "netDown": {
+      "name": "^Current DL rate$",
+      "aggregate": "sum",
+      "scale": 0.008192,
+      "demo": 182.4
+    },
+    "netUp": {
+      "name": "^Current UP rate$",
+      "aggregate": "sum",
+      "scale": 0.008192,
+      "demo": 21.7
+    },
+    "pin1": {
+      "name": "^Pin 1 Current$",
+      "source": "WireView",
+      "demo": 5.4
+    },
+    "pin2": {
+      "name": "^Pin 2 Current$",
+      "source": "WireView",
+      "demo": 5.9
+    },
+    "pin3": {
+      "name": "^Pin 3 Current$",
+      "source": "WireView",
+      "demo": 5.2
+    },
+    "pin4": {
+      "name": "^Pin 4 Current$",
+      "source": "WireView",
+      "demo": 6.6
+    },
+    "pin5": {
+      "name": "^Pin 5 Current$",
+      "source": "WireView",
+      "demo": 5.7
+    },
+    "pin6": {
+      "name": "^Pin 6 Current$",
+      "source": "WireView",
+      "demo": 5.8
+    }
+  },
+  "elements": [
+    {
+      "type": "rect",
+      "x": 12,
+      "y": 12,
+      "w": 484,
+      "h": 92,
+      "color": "#C98A2E",
+      "radius": 8
+    },
+    {
+      "type": "rect",
+      "x": 14,
+      "y": 14,
+      "w": 480,
+      "h": 88,
+      "color": "#131009",
+      "radius": 6
+    },
+    {
+      "type": "text",
+      "x": 32,
+      "y": 24,
+      "text": "Pump",
+      "font": "Roboto",
+      "size": 15,
+      "color": "#8F806C"
+    },
+    {
+      "type": "text",
+      "x": 192,
+      "y": 24,
+      "text": "{pump:0}",
+      "font": "Roboto",
+      "size": 15,
+      "color": "#F4EADB",
+      "align": "right"
+    },
+    {
+      "type": "text",
+      "x": 196,
+      "y": 24,
+      "text": "RPM",
+      "font": "Roboto",
+      "size": 15,
+      "color": "#FFB547"
+    },
+    {
+      "type": "text",
+      "x": 272,
+      "y": 24,
+      "text": "Water",
+      "font": "Roboto",
+      "size": 15,
+      "color": "#8F806C"
+    },
+    {
+      "type": "text",
+      "x": 436,
+      "y": 24,
+      "text": "{water:0.0}",
+      "font": "Roboto",
+      "size": 15,
+      "color": "#F4EADB",
+      "align": "right"
+    },
+    {
+      "type": "text",
+      "x": 440,
+      "y": 24,
+      "text": "°C",
+      "font": "Roboto",
+      "size": 15,
+      "color": "#FFB547"
+    },
+    {
+      "type": "text",
+      "x": 32,
+      "y": 60,
+      "text": "Fan",
+      "font": "Roboto",
+      "size": 15,
+      "color": "#8F806C"
+    },
+    {
+      "type": "text",
+      "x": 192,
+      "y": 60,
+      "text": "{fan:0}",
+      "font": "Roboto",
+      "size": 15,
+      "color": "#F4EADB",
+      "align": "right"
+    },
+    {
+      "type": "text",
+      "x": 196,
+      "y": 60,
+      "text": "RPM",
+      "font": "Roboto",
+      "size": 15,
+      "color": "#FFB547"
+    },
+    {
+      "type": "text",
+      "x": 272,
+      "y": 60,
+      "text": "Flow",
+      "font": "Roboto",
+      "size": 15,
+      "color": "#8F806C"
+    },
+    {
+      "type": "text",
+      "x": 436,
+      "y": 60,
+      "text": "{flow:0}",
+      "font": "Roboto",
+      "size": 15,
+      "color": "#F4EADB",
+      "align": "right"
+    },
+    {
+      "type": "text",
+      "x": 440,
+      "y": 60,
+      "text": "L/h",
+      "font": "Roboto",
+      "size": 15,
+      "color": "#FFB547"
+    },
+    {
+      "type": "rect",
+      "x": 508,
+      "y": 12,
+      "w": 504,
+      "h": 92,
+      "color": "#C98A2E",
+      "radius": 8
+    },
+    {
+      "type": "rect",
+      "x": 510,
+      "y": 14,
+      "w": 500,
+      "h": 88,
+      "color": "#131009",
+      "radius": 6
+    },
+    {
+      "type": "text",
+      "x": 528,
+      "y": 18,
+      "text": "{HOSTNAME}",
+      "font": "Roboto",
+      "size": 22,
+      "color": "#F4EADB"
+    },
+    {
+      "type": "text",
+      "x": 528,
+      "y": 62,
+      "text": "{date:dddd d MMMM yyyy}",
+      "font": "Roboto",
+      "size": 14,
+      "color": "#8F806C"
+    },
+    {
+      "type": "text",
+      "x": 992,
+      "y": 58,
+      "text": "{time:HH:mm:ss}",
+      "font": "Roboto",
+      "size": 18,
+      "color": "#FFB547",
+      "align": "right"
+    },
+    {
+      "type": "rect",
+      "x": 12,
+      "y": 114,
+      "w": 484,
+      "h": 282,
+      "color": "#C98A2E",
+      "radius": 8
+    },
+    {
+      "type": "rect",
+      "x": 14,
+      "y": 116,
+      "w": 480,
+      "h": 278,
+      "color": "#131009",
+      "radius": 6
+    },
+    {
+      "type": "text",
+      "x": 32,
+      "y": 128,
+      "text": "{CPUMODEL}",
+      "font": "Roboto",
+      "size": 20,
+      "color": "#F4EADB"
+    },
+    {
+      "type": "gauge",
+      "x": 34,
+      "y": 182,
+      "w": 176,
+      "thickness": 14,
+      "start": 135,
+      "sweep": 270,
+      "roundCaps": false,
+      "sensor": "cpuLoad",
+      "min": 0,
+      "max": 100,
+      "color": "#FFB547",
+      "bg": "#2E261C"
+    },
+    {
+      "type": "text",
+      "x": 34,
+      "y": 232,
+      "text": "{cpuLoad:0}%",
+      "font": "Roboto Light",
+      "size": 34,
+      "color": "#F4EADB",
+      "align": "center",
+      "w": 176
+    },
+    {
+      "type": "text",
+      "x": 34,
+      "y": 282,
+      "text": "{cpuPower:0.0} W",
+      "font": "Roboto",
+      "size": 13,
+      "color": "#FFB547",
+      "align": "center",
+      "w": 176
+    },
+    {
+      "type": "text",
+      "x": 34,
+      "y": 302,
+      "text": "Load",
+      "font": "Roboto",
+      "size": 12,
+      "color": "#8F806C",
+      "align": "center",
+      "w": 176
+    },
+    {
+      "type": "bar",
+      "x": 244,
+      "y": 196,
+      "w": 232,
+      "h": 12,
+      "sensor": "cpuTemp",
+      "min": 20,
+      "max": 100,
+      "color": "#FFB547",
+      "bg": "#2E261C",
+      "radius": 0,
+      "thresholds": [
+        {
+          "at": 75,
+          "color": "#FF8A3D"
+        },
+        {
+          "at": 88,
+          "color": "#FF5F4A"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "x": 244,
+      "y": 214,
+      "text": "Temperature",
+      "font": "Roboto",
+      "size": 14,
+      "color": "#8F806C"
+    },
+    {
+      "type": "text",
+      "x": 476,
+      "y": 214,
+      "text": "{cpuTemp:0} °C",
+      "font": "Roboto",
+      "size": 14,
+      "color": "#F4EADB",
+      "align": "right"
+    },
+    {
+      "type": "bar",
+      "x": 244,
+      "y": 258,
+      "w": 232,
+      "h": 12,
+      "sensor": "cpuClock",
+      "min": 0,
+      "max": 5700,
+      "color": "#FFB547",
+      "bg": "#2E261C",
+      "radius": 0
+    },
+    {
+      "type": "text",
+      "x": 244,
+      "y": 276,
+      "text": "CPU Clock",
+      "font": "Roboto",
+      "size": 14,
+      "color": "#8F806C"
+    },
+    {
+      "type": "text",
+      "x": 476,
+      "y": 276,
+      "text": "{cpuClock:0} MHz",
+      "font": "Roboto",
+      "size": 14,
+      "color": "#F4EADB",
+      "align": "right"
+    },
+    {
+      "type": "bar",
+      "x": 244,
+      "y": 320,
+      "w": 232,
+      "h": 12,
+      "sensor": "memLoad",
+      "min": 0,
+      "max": 100,
+      "color": "#FFB547",
+      "bg": "#2E261C",
+      "radius": 0
+    },
+    {
+      "type": "text",
+      "x": 244,
+      "y": 338,
+      "text": "Memory",
+      "font": "Roboto",
+      "size": 14,
+      "color": "#8F806C"
+    },
+    {
+      "type": "text",
+      "x": 476,
+      "y": 338,
+      "text": "{memUsed:0.0} / {memTotal:0} GB",
+      "font": "Roboto",
+      "size": 14,
+      "color": "#F4EADB",
+      "align": "right"
+    },
+    {
+      "type": "rect",
+      "x": 508,
+      "y": 114,
+      "w": 504,
+      "h": 282,
+      "color": "#C98A2E",
+      "radius": 8
+    },
+    {
+      "type": "rect",
+      "x": 510,
+      "y": 116,
+      "w": 500,
+      "h": 278,
+      "color": "#131009",
+      "radius": 6
+    },
+    {
+      "type": "text",
+      "x": 528,
+      "y": 128,
+      "text": "{GPUMODEL}",
+      "font": "Roboto",
+      "size": 20,
+      "color": "#F4EADB"
+    },
+    {
+      "type": "gauge",
+      "x": 530,
+      "y": 182,
+      "w": 176,
+      "thickness": 14,
+      "start": 135,
+      "sweep": 270,
+      "roundCaps": false,
+      "sensor": "gpuLoad",
+      "min": 0,
+      "max": 100,
+      "color": "#FFB547",
+      "bg": "#2E261C"
+    },
+    {
+      "type": "text",
+      "x": 530,
+      "y": 232,
+      "text": "{gpuLoad:0}%",
+      "font": "Roboto Light",
+      "size": 34,
+      "color": "#F4EADB",
+      "align": "center",
+      "w": 176
+    },
+    {
+      "type": "text",
+      "x": 530,
+      "y": 282,
+      "text": "{gpuPower:0} W",
+      "font": "Roboto",
+      "size": 13,
+      "color": "#FFB547",
+      "align": "center",
+      "w": 176
+    },
+    {
+      "type": "text",
+      "x": 530,
+      "y": 302,
+      "text": "Load",
+      "font": "Roboto",
+      "size": 12,
+      "color": "#8F806C",
+      "align": "center",
+      "w": 176
+    },
+    {
+      "type": "bar",
+      "x": 740,
+      "y": 196,
+      "w": 252,
+      "h": 12,
+      "sensor": "gpuTemp",
+      "min": 20,
+      "max": 100,
+      "color": "#FFB547",
+      "bg": "#2E261C",
+      "radius": 0,
+      "thresholds": [
+        {
+          "at": 75,
+          "color": "#FF8A3D"
+        },
+        {
+          "at": 85,
+          "color": "#FF5F4A"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "x": 740,
+      "y": 214,
+      "text": "Temperature",
+      "font": "Roboto",
+      "size": 14,
+      "color": "#8F806C"
+    },
+    {
+      "type": "text",
+      "x": 992,
+      "y": 214,
+      "text": "{gpuTemp:0} °C",
+      "font": "Roboto",
+      "size": 14,
+      "color": "#F4EADB",
+      "align": "right"
+    },
+    {
+      "type": "bar",
+      "x": 740,
+      "y": 258,
+      "w": 252,
+      "h": 12,
+      "sensor": "gpuClock",
+      "min": 0,
+      "max": 3200,
+      "color": "#FFB547",
+      "bg": "#2E261C",
+      "radius": 0
+    },
+    {
+      "type": "text",
+      "x": 740,
+      "y": 276,
+      "text": "GPU Clock",
+      "font": "Roboto",
+      "size": 14,
+      "color": "#8F806C"
+    },
+    {
+      "type": "text",
+      "x": 992,
+      "y": 276,
+      "text": "{gpuClock:0} MHz",
+      "font": "Roboto",
+      "size": 14,
+      "color": "#F4EADB",
+      "align": "right"
+    },
+    {
+      "type": "bar",
+      "x": 740,
+      "y": 320,
+      "w": 252,
+      "h": 12,
+      "sensor": "vramLoad",
+      "min": 0,
+      "max": 100,
+      "color": "#FFB547",
+      "bg": "#2E261C",
+      "radius": 0
+    },
+    {
+      "type": "text",
+      "x": 740,
+      "y": 338,
+      "text": "VRAM",
+      "font": "Roboto",
+      "size": 14,
+      "color": "#8F806C"
+    },
+    {
+      "type": "text",
+      "x": 992,
+      "y": 338,
+      "text": "{vramUsed:0.0} / {vramTotal:0} GB",
+      "font": "Roboto",
+      "size": 14,
+      "color": "#F4EADB",
+      "align": "right"
+    },
+    {
+      "type": "rect",
+      "x": 12,
+      "y": 408,
+      "w": 316,
+      "h": 172,
+      "color": "#C98A2E",
+      "radius": 8
+    },
+    {
+      "type": "rect",
+      "x": 14,
+      "y": 410,
+      "w": 312,
+      "h": 168,
+      "color": "#131009",
+      "radius": 6
+    },
+    {
+      "type": "text",
+      "x": 104,
+      "y": 418,
+      "text": "{fps:0}",
+      "font": "Roboto",
+      "size": 26,
+      "color": "#F4EADB",
+      "align": "right"
+    },
+    {
+      "type": "text",
+      "x": 110,
+      "y": 430,
+      "text": "FPS",
+      "font": "Roboto",
+      "size": 15,
+      "color": "#FFB547"
+    },
+    {
+      "type": "graph",
+      "x": 32,
+      "y": 470,
+      "w": 276,
+      "h": 92,
+      "sensor": "fps",
+      "min": 0,
+      "max": 240,
+      "autoscale": false,
+      "points": 90,
+      "color": "#FFB547",
+      "bg": "#131009",
+      "graphType": "line",
+      "gridColor": "#241E16",
+      "gridSize": 23,
+      "lineWidth": 2
+    },
+    {
+      "type": "rect",
+      "x": 340,
+      "y": 408,
+      "w": 328,
+      "h": 172,
+      "color": "#C98A2E",
+      "radius": 8
+    },
+    {
+      "type": "rect",
+      "x": 342,
+      "y": 410,
+      "w": 324,
+      "h": 168,
+      "color": "#131009",
+      "radius": 6
+    },
+    {
+      "type": "text",
+      "x": 360,
+      "y": 420,
+      "text": "12V PINS",
+      "font": "Roboto",
+      "size": 22,
+      "color": "#F4EADB"
+    },
+    {
+      "type": "text",
+      "x": 648,
+      "y": 428,
+      "text": "A",
+      "font": "Roboto",
+      "size": 15,
+      "color": "#FFB547",
+      "align": "right"
+    },
+    {
+      "type": "bar",
+      "x": 362,
+      "y": 462,
+      "w": 30,
+      "h": 72,
+      "sensor": "pin1",
+      "min": 0,
+      "max": 12,
+      "color": "#FFB547",
+      "bg": "#2E261C",
+      "radius": 0,
+      "thresholds": [
+        {
+          "at": 8,
+          "color": "#FF8A3D"
+        },
+        {
+          "at": 9.5,
+          "color": "#FF5F4A"
+        }
+      ],
+      "vertical": true
+    },
+    {
+      "type": "text",
+      "x": 352,
+      "y": 540,
+      "text": "{pin1:0.0}",
+      "font": "Roboto",
+      "size": 12,
+      "color": "#F4EADB",
+      "align": "center",
+      "w": 50
+    },
+    {
+      "type": "bar",
+      "x": 412,
+      "y": 462,
+      "w": 30,
+      "h": 72,
+      "sensor": "pin2",
+      "min": 0,
+      "max": 12,
+      "color": "#FFB547",
+      "bg": "#2E261C",
+      "radius": 0,
+      "thresholds": [
+        {
+          "at": 8,
+          "color": "#FF8A3D"
+        },
+        {
+          "at": 9.5,
+          "color": "#FF5F4A"
+        }
+      ],
+      "vertical": true
+    },
+    {
+      "type": "text",
+      "x": 402,
+      "y": 540,
+      "text": "{pin2:0.0}",
+      "font": "Roboto",
+      "size": 12,
+      "color": "#F4EADB",
+      "align": "center",
+      "w": 50
+    },
+    {
+      "type": "bar",
+      "x": 462,
+      "y": 462,
+      "w": 30,
+      "h": 72,
+      "sensor": "pin3",
+      "min": 0,
+      "max": 12,
+      "color": "#FFB547",
+      "bg": "#2E261C",
+      "radius": 0,
+      "thresholds": [
+        {
+          "at": 8,
+          "color": "#FF8A3D"
+        },
+        {
+          "at": 9.5,
+          "color": "#FF5F4A"
+        }
+      ],
+      "vertical": true
+    },
+    {
+      "type": "text",
+      "x": 452,
+      "y": 540,
+      "text": "{pin3:0.0}",
+      "font": "Roboto",
+      "size": 12,
+      "color": "#F4EADB",
+      "align": "center",
+      "w": 50
+    },
+    {
+      "type": "bar",
+      "x": 512,
+      "y": 462,
+      "w": 30,
+      "h": 72,
+      "sensor": "pin4",
+      "min": 0,
+      "max": 12,
+      "color": "#FFB547",
+      "bg": "#2E261C",
+      "radius": 0,
+      "thresholds": [
+        {
+          "at": 8,
+          "color": "#FF8A3D"
+        },
+        {
+          "at": 9.5,
+          "color": "#FF5F4A"
+        }
+      ],
+      "vertical": true
+    },
+    {
+      "type": "text",
+      "x": 502,
+      "y": 540,
+      "text": "{pin4:0.0}",
+      "font": "Roboto",
+      "size": 12,
+      "color": "#F4EADB",
+      "align": "center",
+      "w": 50
+    },
+    {
+      "type": "bar",
+      "x": 562,
+      "y": 462,
+      "w": 30,
+      "h": 72,
+      "sensor": "pin5",
+      "min": 0,
+      "max": 12,
+      "color": "#FFB547",
+      "bg": "#2E261C",
+      "radius": 0,
+      "thresholds": [
+        {
+          "at": 8,
+          "color": "#FF8A3D"
+        },
+        {
+          "at": 9.5,
+          "color": "#FF5F4A"
+        }
+      ],
+      "vertical": true
+    },
+    {
+      "type": "text",
+      "x": 552,
+      "y": 540,
+      "text": "{pin5:0.0}",
+      "font": "Roboto",
+      "size": 12,
+      "color": "#F4EADB",
+      "align": "center",
+      "w": 50
+    },
+    {
+      "type": "bar",
+      "x": 612,
+      "y": 462,
+      "w": 30,
+      "h": 72,
+      "sensor": "pin6",
+      "min": 0,
+      "max": 12,
+      "color": "#FFB547",
+      "bg": "#2E261C",
+      "radius": 0,
+      "thresholds": [
+        {
+          "at": 8,
+          "color": "#FF8A3D"
+        },
+        {
+          "at": 9.5,
+          "color": "#FF5F4A"
+        }
+      ],
+      "vertical": true
+    },
+    {
+      "type": "text",
+      "x": 602,
+      "y": 540,
+      "text": "{pin6:0.0}",
+      "font": "Roboto",
+      "size": 12,
+      "color": "#F4EADB",
+      "align": "center",
+      "w": 50
+    },
+    {
+      "type": "rect",
+      "x": 680,
+      "y": 408,
+      "w": 332,
+      "h": 172,
+      "color": "#C98A2E",
+      "radius": 8
+    },
+    {
+      "type": "rect",
+      "x": 682,
+      "y": 410,
+      "w": 328,
+      "h": 168,
+      "color": "#131009",
+      "radius": 6
+    },
+    {
+      "type": "text",
+      "x": 700,
+      "y": 420,
+      "text": "NETWORK",
+      "font": "Roboto",
+      "size": 22,
+      "color": "#F4EADB"
+    },
+    {
+      "type": "text",
+      "x": 700,
+      "y": 454,
+      "text": "{LOCALIP}",
+      "font": "Roboto",
+      "size": 19,
+      "color": "#FFB547"
+    },
+    {
+      "type": "text",
+      "x": 700,
+      "y": 484,
+      "text": "{LOCALIP6}",
+      "font": "Roboto",
+      "size": 10,
+      "color": "#8F806C",
+      "showIf": "{LOCALIP6}"
+    },
+    {
+      "type": "text",
+      "x": 700,
+      "y": 510,
+      "text": "RX",
+      "font": "Roboto",
+      "size": 14,
+      "color": "#8F806C"
+    },
+    {
+      "type": "bar",
+      "x": 736,
+      "y": 513,
+      "w": 140,
+      "h": 14,
+      "sensor": "netDown",
+      "min": 0,
+      "max": 1000,
+      "color": "#FFB547",
+      "bg": "#2E261C",
+      "radius": 0
+    },
+    {
+      "type": "text",
+      "x": 992,
+      "y": 510,
+      "text": "{netDown:0.0} Mbps",
+      "font": "Roboto",
+      "size": 13,
+      "color": "#F4EADB",
+      "align": "right"
+    },
+    {
+      "type": "text",
+      "x": 700,
+      "y": 542,
+      "text": "TX",
+      "font": "Roboto",
+      "size": 14,
+      "color": "#8F806C"
+    },
+    {
+      "type": "bar",
+      "x": 736,
+      "y": 545,
+      "w": 140,
+      "h": 14,
+      "sensor": "netUp",
+      "min": 0,
+      "max": 100,
+      "color": "#7BD389",
+      "bg": "#2E261C",
+      "radius": 0
+    },
+    {
+      "type": "text",
+      "x": 992,
+      "y": 542,
+      "text": "{netUp:0.0} Mbps",
+      "font": "Roboto",
+      "size": 13,
+      "color": "#F4EADB",
+      "align": "right"
+    }
+  ]
+}

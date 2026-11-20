@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    Compile-only stand-in for G.Skill/ElmorLabs' WigiDashWidgetFramework.dll, used when WigiDash Manager
+    isn't installed (CI, forks). WigiDash Manager's licence doesn't allow redistributing the real DLL, so this
+    assembly declares just enough of the public API for the widget to compile. It is never shipped: the widget
+    references it with Private=false, and at runtime the Manager supplies the real framework.
+  -->
+  <PropertyGroup>
+    <TargetFramework>net472</TargetFramework>
+    <AssemblyName>WigiDashWidgetFramework</AssemblyName>
+    <RootNamespace>WigiDashWidgetFramework</RootNamespace>
+    <LangVersion>latest</LangVersion>
+    <!-- Same identity as the real assembly (not strong-named) so the widget binds to it at runtime. -->
+    <AssemblyVersion>1.0.0.1</AssemblyVersion>
+    <FileVersion>1.0.0.1</FileVersion>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="System.Drawing" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="WindowsBase" />
+    <Reference Include="System.Xaml" />
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="all" />
+  </ItemGroup>
+
+</Project>

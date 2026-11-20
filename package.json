@@ -1,0 +1,12 @@
+{
+  "name": "wigidash-panel",
+  "private": true,
+  "description": "Release tooling only (semantic-release). The widget itself is built with the .NET SDK.",
+  "scripts": {
+    "release": "semantic-release"
+  },
+  "devDependencies": {
+    "@semantic-release/exec": "^7.1.0",
+    "semantic-release": "^25.0.9"
+  }
+}
