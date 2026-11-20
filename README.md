@@ -41,6 +41,15 @@ afterwards.
 The installer isn't code-signed yet, so SmartScreen may show "Windows protected your PC". Click
 **More info**, then **Run anyway**.
 
+To check that a download was built by this repository's release workflow and hasn't been changed,
+verify its build provenance attestation with the [GitHub CLI](https://cli.github.com/):
+
+```powershell
+gh attestation verify wigidash-panel-setup-X.Y.Z.exe -R sgarcesc/wigidash-panel
+```
+
+The same command works for the zip. Releases made before attestations were added have none.
+
 <details>
 <summary>Alternative: the zip and <code>install.ps1</code></summary>
 
