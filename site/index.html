@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>wigidash-panel</title>
+  <meta name="description" content="A free-form 5×4 sensor panel widget for the G.Skill WigiDash. Replaces the AIDA64 SensorPanel setup using the HWiNFO data WigiDash Manager already collects.">
+  <meta property="og:title" content="wigidash-panel">
+  <meta property="og:description" content="A free-form sensor panel widget for the G.Skill WigiDash, with native skins and AIDA64 skin import.">
+  <meta property="og:image" content="https://sgarcesc.github.io/wigidash-panel/preview.png">
+  <meta name="theme-color" content="#0b0b12">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="top">
+    <nav class="wrap nav" aria-label="Main">
+      <a class="brand" href="#">wigidash-panel</a>
+      <ul>
+        <li><a href="#skins">Skins</a></li>
+        <li><a href="#features">Features</a></li>
+        <li><a href="#install">Install</a></li>
+        <li><a href="https://github.com/sgarcesc/wigidash-panel">GitHub</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero wrap">
+      <div class="hero-text">
+        <h1>A free-form sensor panel for the G.Skill&nbsp;WigiDash</h1>
+        <p class="lede">
+          Place one widget at <strong>5×4</strong> and it draws a full-screen dashboard from a JSON
+          layout file. It replaces the AIDA64 SensorPanel setup without the WigiDash grid look, and
+          uses the sensor data WigiDash Manager already collects through its bundled HWiNFO.
+          AIDA64 is not needed.
+        </p>
+        <p class="cta">
+          <a class="button primary" href="https://github.com/sgarcesc/wigidash-panel/releases/latest">Download the latest release</a>
+          <a class="button" href="#skins">See the skins</a>
+        </p>
+      </div>
+      <figure class="screen">
+        <img src="preview.png" alt="The default layout: CPU and GPU temperature rings, load, clock and power bars, memory, water loop and VRAM" width="1016" height="592">
+      </figure>
+    </section>
+
+    <section id="how" class="wrap">
+      <h2>How it works</h2>
+      <ul class="cards three">
+        <li>
+          <h3>A normal widget</h3>
+          <p>WigiDash Manager loads it like any other widget, so its pages, sleep and brightness
+            behaviour all keep working.</p>
+        </li>
+        <li>
+          <h3>Drawn for the device</h3>
+          <p>Layouts are designed on the physical 1024×600 canvas and shown centred on the 5×4
+            widget (1016×592). Coordinates from an AIDA64 WigiDash panel carry over unchanged.</p>
+        </li>
+        <li>
+          <h3>HWiNFO sensors</h3>
+          <p>Sensors come from the Manager's own sensor list. Bindings in the layout pick them by
+            regex on name, source and unit.</p>
+        </li>
+      </ul>
+    </section>
+
+    <section id="skins" class="wrap">
+      <h2>Native skins</h2>
+      <p>
+        The widget ships with {{SKIN_COUNT}} JSON skins built for it. Each one shows date and time;
+        CPU and GPU name, temperature, clock, power, load, memory and VRAM used vs total; FPS;
+        12V-2x6 per-pin current; water loop pump, water temperature, fan and flow; and network
+        IPv4/IPv6 with download and upload speed. Select a skin to see it at full size.
+      </p>
+      <ul class="gallery">
+        <!-- SKINS -->
+      </ul>
+    </section>
+
+    <section id="features" class="wrap">
+      <h2>Features</h2>
+      <ul class="cards">
+        <li>
+          <h3>JSON layouts</h3>
+          <p>Rectangles, text, bars, ring gauges, graphs and images, with colour thresholds. Text
+            templates mix sensor values, CPU and GPU model, host name, date and time. <code>//</code>
+            comments are allowed.</p>
+        </li>
+        <li>
+          <h3>Regex sensor bindings</h3>
+          <p>Bind a sensor by regex on its name, source and unit. Use the first match, or combine
+            every match with <code>avg</code>, <code>max</code>, <code>min</code> or
+            <code>sum</code>.</p>
+        </li>
+        <li>
+          <h3>AIDA64 skin import</h3>
+          <p>Loads WigiDash LCD skins (<code>.gslcd</code>) and SensorPanel skins
+            (<code>.sensorpanel</code>) directly, including their images, image-strip gauges,
+            labels, values, bars and graphs. AIDA64 doesn't need to be installed.</p>
+        </li>
+        <li>
+          <h3>Skin switching</h3>
+          <p>Pick a skin from the list in the widget's settings, or swipe or long-press the panel
+            on the WigiDash to move to the next one.</p>
+        </li>
+        <li>
+          <h3>Per-skin overrides</h3>
+          <p>An <code>aida-sensors.json</code> next to a skin changes only the sensor mappings it
+            lists, such as a date format that fits the skin's artwork.</p>
+        </li>
+        <li>
+          <h3>Custom fonts</h3>
+          <p>Fonts in a skin's folder or its <code>Fonts</code> subfolder load automatically. Fonts
+            in the widget's <code>fonts</code> folder are available to every skin.</p>
+        </li>
+        <li>
+          <h3>Live reload</h3>
+          <p>The panel reloads when the layout, or anything in its folder, is saved. Double-tap the
+            panel on the device to reload it by hand.</p>
+        </li>
+        <li>
+          <h3>Offline preview</h3>
+          <p>A command-line preview tool renders any layout to a PNG with demo values, so you can
+            iterate without the device.</p>
+        </li>
+      </ul>
+    </section>
+
+    <section id="install" class="wrap">
+      <h2>Install</h2>
+      <p>You need WigiDash Manager. You don't need the .NET SDK.</p>
+      <ol class="steps">
+        <li>Download <code>wigidash-panel-setup-X.Y.Z.exe</code> from the
+          <a href="https://github.com/sgarcesc/wigidash-panel/releases/latest">latest release</a>.</li>
+        <li>Run it. It doesn't need admin rights. The installer closes WigiDash Manager, copies the
+          widget into place and restarts the Manager.</li>
+        <li>In WigiDash Manager, add a page and drop <strong>Sensor Panel</strong> onto it at size
+          5×4.</li>
+      </ol>
+      <p>To upgrade, run a newer installer. To uninstall, use <strong>Apps &amp; features</strong>.
+        The installer isn't code-signed yet, so SmartScreen may warn about it: click
+        <strong>More info</strong>, then <strong>Run anyway</strong>. Each release also has a zip
+        with a PowerShell install script; the README explains how to use it.</p>
+      <p>To build from source, edit layouts, or see the full layout format, read the
+        <a href="https://github.com/sgarcesc/wigidash-panel#readme">README</a>.</p>
+    </section>
+  </main>
+
+  <footer class="wrap foot">
+    <ul>
+      <li><a href="https://github.com/sgarcesc/wigidash-panel">Source on GitHub</a></li>
+      <li><a href="https://github.com/sgarcesc/wigidash-panel/releases">Releases</a></li>
+      <li><a href="https://github.com/sgarcesc/wigidash-panel/issues">Issues</a></li>
+      <li><a href="https://github.com/sgarcesc/wigidash-panel/blob/main/LICENSE">Licence</a></li>
+    </ul>
+    <p>Not affiliated with G.Skill, HWiNFO or AIDA64.</p>
+  </footer>
+
+  <dialog class="lightbox" aria-label="Skin at full size">
+    <form method="dialog"><button class="close" aria-label="Close">×</button></form>
+    <img alt="">
+    <p class="caption"></p>
+  </dialog>
+
+  <script>
+    // Progressive enhancement: without JS, each skin link just opens the PNG.
+    const box = document.querySelector('.lightbox');
+    if (box && box.showModal) {
+      const img = box.querySelector('img'), cap = box.querySelector('.caption');
+      document.querySelectorAll('[data-lightbox]').forEach(a => a.addEventListener('click', e => {
+        e.preventDefault();
+        const thumb = a.querySelector('img');
+        img.src = a.href; img.alt = thumb.alt;
+        cap.textContent = a.parentElement.querySelector('p').textContent;
+        box.showModal();
+      }));
+      box.addEventListener('click', e => { if (e.target === box) box.close(); });
+    }
+  </script>
+</body>
+</html>

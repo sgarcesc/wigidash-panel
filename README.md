@@ -7,6 +7,9 @@ through its bundled HWiNFO. AIDA64 is not needed.
 
 ![preview](docs/preview.png)
 
+**Website:** [sgarcesc.github.io/wigidash-panel](https://sgarcesc.github.io/wigidash-panel/), with
+all the native skins at full size.
+
 ## How it works
 
 - WigiDash Manager loads widgets from `%APPDATA%\G.SKILL\WigiDashManager\Widgets\<GUID>\<GUID>.dll`
@@ -211,5 +214,6 @@ layouts/            layouts (default.json recreates the G.Skill AIDA64 panel)
 scripts/install.ps1 install into WigiDash Manager (builds first, or -Prebuilt from a release zip)
 scripts/package.ps1 build + stage the release files (zip with -Zip, installer .exe with -Installer)
 installer/          Inno Setup script for the release installer (compiled by package.ps1 -Installer)
+site/               GitHub Pages site (pwsh site/build.ps1 -> _site/; deployed by .github/workflows/pages.yml)
 .releaserc.json     semantic-release config (used by .github/workflows/release.yml)
 ```
