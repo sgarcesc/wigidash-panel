@@ -40,13 +40,13 @@ $sensors = [ordered]@{
   memUsed   = [ordered]@{ name = '^Physical Memory Used$'; scale = $GB; demo = 17.4 }
   memTotal  = [ordered]@{ name = '^Physical Memory (Used|Available)$'; aggregate = 'sum'; scale = $GB; demo = 61.7 }
   memLoad   = [ordered]@{ name = '^Physical Memory Load$'; demo = 28 }
-  gpuTemp   = [ordered]@{ name = '^GPU Temperature$'; source = '^GPU \[#0\]'; demo = 61 }
-  gpuClock  = [ordered]@{ name = '^GPU Clock$'; source = '^GPU \[#0\]'; demo = 2655 }
-  gpuPower  = [ordered]@{ name = '^GPU Power$'; source = '^GPU \[#0\]'; unit = '^W$'; demo = 412 }
-  gpuLoad   = [ordered]@{ name = '^GPU Core Load$'; source = '^GPU \[#0\]'; demo = 87 }
-  vramUsed  = [ordered]@{ name = '^GPU Memory Allocated$'; source = '^GPU \[#0\]'; scale = $GB; demo = 11.6 }
-  vramTotal = [ordered]@{ name = '^GPU Memory (Allocated|Available)$'; source = '^GPU \[#0\]'; aggregate = 'sum'; scale = $GB; demo = 31.8 }
-  vramLoad  = [ordered]@{ name = '^GPU Memory Usage$'; source = '^GPU \[#0\]'; unit = '%'; demo = 36 }
+  gpuTemp   = [ordered]@{ name = '^GPU Temperature$'; source = '^d?GPU \['; demo = 61 }
+  gpuClock  = [ordered]@{ name = '^GPU Clock$'; source = '^d?GPU \['; demo = 2655 }
+  gpuPower  = [ordered]@{ name = '^GPU Power$'; source = '^d?GPU \['; unit = '^W$'; demo = 412 }
+  gpuLoad   = [ordered]@{ name = '^GPU Core Load$'; source = '^d?GPU \['; demo = 87 }
+  vramUsed  = [ordered]@{ name = '^GPU Memory Allocated$'; source = '^d?GPU \['; scale = $GB; demo = 11.6 }
+  vramTotal = [ordered]@{ name = '^GPU Memory (Allocated|Available)$'; source = '^d?GPU \['; aggregate = 'sum'; scale = $GB; demo = 31.8 }
+  vramLoad  = [ordered]@{ name = '^GPU Memory Usage$'; source = '^d?GPU \['; unit = '%'; demo = 36 }
   fps       = [ordered]@{ name = '^Framerate Presented$'; source = '^PresentMon'; staleMs = 3000; demo = 144 }
   pump      = [ordered]@{ name = '^Fan 4$'; source = 'Aqua Computer Octo'; unit = 'RPM'; demo = 2750 }
   water     = [ordered]@{ name = '^Temperature 4$'; source = 'Aqua Computer Octo'; demo = 31.2 }

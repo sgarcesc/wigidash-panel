@@ -44,41 +44,41 @@
     },
     "gpuTemp": {
       "name": "^GPU Temperature$",
-      "source": "^GPU \\[#0\\]",
+      "source": "^d?GPU \\[",
       "demo": 61
     },
     "gpuClock": {
       "name": "^GPU Clock$",
-      "source": "^GPU \\[#0\\]",
+      "source": "^d?GPU \\[",
       "demo": 2655
     },
     "gpuPower": {
       "name": "^GPU Power$",
-      "source": "^GPU \\[#0\\]",
+      "source": "^d?GPU \\[",
       "unit": "^W$",
       "demo": 412
     },
     "gpuLoad": {
       "name": "^GPU Core Load$",
-      "source": "^GPU \\[#0\\]",
+      "source": "^d?GPU \\[",
       "demo": 87
     },
     "vramUsed": {
       "name": "^GPU Memory Allocated$",
-      "source": "^GPU \\[#0\\]",
+      "source": "^d?GPU \\[",
       "scale": 0.0009765625,
       "demo": 11.6
     },
     "vramTotal": {
       "name": "^GPU Memory (Allocated|Available)$",
-      "source": "^GPU \\[#0\\]",
+      "source": "^d?GPU \\[",
       "aggregate": "sum",
       "scale": 0.0009765625,
       "demo": 31.8
     },
     "vramLoad": {
       "name": "^GPU Memory Usage$",
-      "source": "^GPU \\[#0\\]",
+      "source": "^d?GPU \\[",
       "unit": "%",
       "demo": 36
     },
