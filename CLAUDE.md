@@ -19,6 +19,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
   Don't hand-edit the generated files.
 - When HWiNFO renames sensors, add a fixture to `tests/WigiPanel.Tests/Fixtures`. A fixture is a
   `sensors.txt` saved with the widget's **Sensor list** button.
+- Write a failing test before the fix or feature, for anything in `Layout/` or `Rendering/`. For
+  sensor-binding bugs, the failing test is a new fixture. `Widget/` can't be unit-tested, so check
+  it with the Preview tool or on the device.
 - Commit messages are Conventional Commits, and semantic-release cuts a release on every push to
   `main`: `fix:` gives a patch, `feat:` a minor release and `BREAKING CHANGE:` a major one.
   `docs:`, `ci:` and `chore:` don't release. Tags are plain `X.Y.Z`, with no `v`.
