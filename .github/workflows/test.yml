@@ -17,3 +17,14 @@ jobs:
 
       # Builds against stubs/WigiDashWidgetFramework, since WigiDash Manager isn't installed here.
       - run: dotnet test tests/WigiPanel.Tests -c Release
+
+      # Compile the installer too, so a broken installer/wigidash-panel.iss fails here instead of
+      # in the release job after merge. package.ps1 fails in CI if ISCC.exe is missing.
+      - name: Ensure Inno Setup 6
+        shell: pwsh
+        run: |
+          if (-not (Test-Path "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe")) {
+            choco install innosetup -y --no-progress
+          }
+
+      - run: pwsh -NoProfile -File scripts/package.ps1 -Version 0.0.0 -Installer

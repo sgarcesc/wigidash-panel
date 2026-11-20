@@ -34,7 +34,8 @@ Requirements: WigiDash Manager. You don't need the .NET SDK.
 The installer closes WigiDash Manager, copies the widget into place and restarts the Manager. Then,
 in WigiDash Manager, add a page and drop **Sensor Panel** onto it at size 5×4. To upgrade, run a
 newer installer over the old one. To uninstall, use **Apps & features**. Uninstalling removes the
-files the installer shipped and leaves any skins and fonts you added.
+files the installer shipped and leaves any skins and fonts you added. If WigiDash Manager is
+running, the uninstaller asks before closing it, then starts it again afterwards.
 
 The installer isn't code-signed yet, so SmartScreen may show "Windows protected your PC". Click
 **More info**, then **Run anyway**.

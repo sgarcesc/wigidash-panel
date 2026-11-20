@@ -14,7 +14,8 @@
 
 ; WigiDash Manager loads Widgets\<GUID>\<GUID>.dll, so the GUID is also the folder and DLL name.
 #define Guid "56507051-FDDD-447B-B59B-81D78C7CD961"
-#define ManagerExe "{commonpf32}\G.SKILL\WigiDash Manager\WigiDashManager.exe"
+#define ManagerDir "{commonpf32}\G.SKILL\WigiDash Manager"
+#define ManagerExe ManagerDir + "\WigiDashManager.exe"
 
 [Setup]
 ; Fixed AppId, so a newer installer upgrades the existing install in place. Never change it.
@@ -64,29 +65,77 @@ Source: "{#SourceDir}\fonts\*"; DestDir: "{app}\fonts"; Flags: ignoreversion rec
 Name: "{app}\fonts"
 
 [Run]
-; Skipped when the Manager isn't at its default location. Not skipifsilent: a silent install still
-; closes the Manager (CloseApplications), so it must start it again too.
-Filename: "{#ManagerExe}"; WorkingDir: "{commonpf32}\G.SKILL\WigiDash Manager"; \
-  Description: "Start WigiDash Manager"; Flags: postinstall nowait; \
-  Check: ManagerInstalled
+; Skipped when the Manager isn't at its default location, and in silent installs when the Manager
+; wasn't running beforehand. Not skipifsilent: a silent upgrade still closes the Manager through
+; Restart Manager, so it has to start it again. shellexec goes through ShellExecute like
+; install.ps1's Start-Process, so a UAC prompt would appear if the Manager ever needed elevation.
+Filename: "{#ManagerExe}"; WorkingDir: "{#ManagerDir}"; \
+  Description: "Start WigiDash Manager"; Flags: postinstall nowait shellexec; \
+  Check: ShouldStartManager
 
 [Code]
+var
+  ManagerWasRunning: Boolean;
+
 function ManagerInstalled: Boolean;
 begin
   Result := FileExists(ExpandConstant('{#ManagerExe}'));
 end;
 
-// The uninstaller doesn't use Restart Manager, so close the Manager here; otherwise the loaded
-// widget DLL is locked and can't be removed.
+// Assumes the Manager is running when WMI can't be queried; the callers then do one harmless
+// extra step (a prompt or a start) instead of skipping a needed one.
+function IsManagerRunning: Boolean;
+var
+  Locator, Service, Processes: Variant;
+begin
+  Result := True;
+  try
+    Locator := CreateOleObject('WbemScripting.SWbemLocator');
+    Service := Locator.ConnectServer('.', 'root\CIMV2');
+    Processes := Service.ExecQuery('SELECT ProcessId FROM Win32_Process WHERE Name = ''WigiDashManager.exe''');
+    Result := Processes.Count > 0;
+  except
+  end;
+end;
+
+// Runs before Restart Manager closes anything, so this is the state the user left it in.
+function PrepareToInstall(var NeedsRestart: Boolean): String;
+begin
+  ManagerWasRunning := IsManagerRunning;
+  Result := '';
+end;
+
+// Interactive installs always offer the checkbox; silent installs only restart a Manager they closed.
+function ShouldStartManager: Boolean;
+begin
+  Result := ManagerInstalled and (ManagerWasRunning or not WizardSilent);
+end;
+
+// The uninstaller doesn't use Restart Manager, so the Manager is closed here; otherwise the loaded
+// widget DLL is locked and can't be removed. Interactive uninstalls ask first.
+function InitializeUninstall: Boolean;
+begin
+  Result := True;
+  ManagerWasRunning := IsManagerRunning;
+  if ManagerWasRunning and not UninstallSilent then
+    Result := MsgBox('WigiDash Manager must be closed to remove the widget. Save any unsaved '
+      + 'changes in it first.' + #13#10#13#10 + 'Close WigiDash Manager and continue? It will be '
+      + 'started again afterwards.', mbConfirmation, MB_OKCANCEL) = IDOK;
+end;
+
 procedure CurUninstallStepChanged(CurUninstallStep: TUninstallStep);
 var
   ResultCode: Integer;
 begin
-  if CurUninstallStep = usUninstall then
+  if not ManagerWasRunning then Exit;
+  if CurUninstallStep = usUninstall then begin
     if Exec(ExpandConstant('{sys}\taskkill.exe'), '/F /IM WigiDashManager.exe', '', SW_HIDE,
         ewWaitUntilTerminated, ResultCode) and (ResultCode = 0) then
       // The DLL can stay locked for a few seconds after the process exits.
       Sleep(3000);
+  end else if (CurUninstallStep = usPostUninstall) and ManagerInstalled then
+    ShellExec('', ExpandConstant('{#ManagerExe}'), '', ExpandConstant('{#ManagerDir}'),
+      SW_SHOWNORMAL, ewNoWait, ResultCode);
 end;
 
 [Messages]
