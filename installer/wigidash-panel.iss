@@ -64,15 +64,29 @@ Source: "{#SourceDir}\fonts\*"; DestDir: "{app}\fonts"; Flags: ignoreversion rec
 Name: "{app}\fonts"
 
 [Run]
-; Skipped when the Manager isn't at its default location.
+; Skipped when the Manager isn't at its default location. Not skipifsilent: a silent install still
+; closes the Manager (CloseApplications), so it must start it again too.
 Filename: "{#ManagerExe}"; WorkingDir: "{commonpf32}\G.SKILL\WigiDash Manager"; \
-  Description: "Start WigiDash Manager"; Flags: postinstall nowait skipifsilent; \
+  Description: "Start WigiDash Manager"; Flags: postinstall nowait; \
   Check: ManagerInstalled
 
 [Code]
 function ManagerInstalled: Boolean;
 begin
   Result := FileExists(ExpandConstant('{#ManagerExe}'));
+end;
+
+// The uninstaller doesn't use Restart Manager, so close the Manager here; otherwise the loaded
+// widget DLL is locked and can't be removed.
+procedure CurUninstallStepChanged(CurUninstallStep: TUninstallStep);
+var
+  ResultCode: Integer;
+begin
+  if CurUninstallStep = usUninstall then
+    if Exec(ExpandConstant('{sys}\taskkill.exe'), '/F /IM WigiDashManager.exe', '', SW_HIDE,
+        ewWaitUntilTerminated, ResultCode) and (ResultCode = 0) then
+      // The DLL can stay locked for a few seconds after the process exits.
+      Sleep(3000);
 end;
 
 [Messages]
