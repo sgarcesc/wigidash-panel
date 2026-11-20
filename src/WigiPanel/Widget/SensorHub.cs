@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading;
 using WigiDashWidgetFramework;
 using WigiPanel.Layout;
@@ -153,9 +152,7 @@ namespace WigiPanel.Widget
             {
                 if (byKey.ContainsKey(kv.Key)) continue;
                 if (!string.IsNullOrEmpty(kv.Value.System)) continue; // computed locally, see SystemSensors
-                var all_ = all.Where(s => Matches(kv.Value, s));
-                var matches = !string.IsNullOrEmpty(kv.Value.Aggregate) ? all_.ToList()
-                    : all_.Skip(Math.Max(0, kv.Value.Index ?? 0)).Take(1).ToList();
+                var matches = SensorMatcher.Select(kv.Value, all, s => s.Name, s => s.Source, s => s.Unit);
                 if (matches.Count == 0) { unbound.Add(kv.Key); continue; }
 
                 foreach (var item in matches)
@@ -188,21 +185,6 @@ namespace WigiPanel.Widget
             if (!monitoredIds.Contains(id)) return;
             values[id] = value;
             lastSeen[id] = Environment.TickCount;
-        }
-
-        private static bool Matches(SensorBinding b, SensorItem s)
-        {
-            if (string.IsNullOrEmpty(b.Name) && string.IsNullOrEmpty(b.Source)) return false;
-            return IsMatch(b.Name, s.Name) && IsMatch(b.Source, s.Source) && IsMatch(b.Unit, s.Unit);
-        }
-
-        /// <summary>Case-insensitive regex match; sensor names are trimmed (HWiNFO pads some with spaces).</summary>
-        private static bool IsMatch(string pattern, string value)
-        {
-            if (string.IsNullOrEmpty(pattern)) return true;
-            value = (value ?? "").Trim();
-            try { return Regex.IsMatch(value, pattern, RegexOptions.IgnoreCase | RegexOptions.CultureInvariant); }
-            catch (ArgumentException) { return string.Equals(pattern, value, StringComparison.OrdinalIgnoreCase); }
         }
 
         private static string Identity(SensorItem s) =>

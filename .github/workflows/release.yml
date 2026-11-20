@@ -35,6 +35,8 @@ jobs:
 
       - run: npm ci
 
+      - run: dotnet test tests/WigiPanel.Tests -c Release
+
       # Builds against stubs/WigiDashWidgetFramework, since WigiDash Manager isn't installed here.
       - run: npx semantic-release
         env:

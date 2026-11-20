@@ -30,17 +30,17 @@
     "SNBCLK":     { "unit": "MHz", "sensor": { "name": "^Infinity Fabric Clock$", "demo": 2000 }, "format": "0" },
 
     // ---------------------------------------------------------------- GPU
-    "TGPU1":      { "sensor": { "name": "^GPU Temperature$", "source": "^GPU \\[#0\\]", "demo": 38 }, "format": "0" },
-    "SGPU1CLK":   { "unit": "MHz", "sensor": { "name": "^GPU Clock$", "source": "^GPU \\[#0\\]", "demo": 2407 }, "format": "0" },
-    "SGPU1UTI":   { "sensor": { "name": "^GPU Core Load$", "source": "^GPU \\[#0\\]", "demo": 23 }, "format": "0" },
-    "PGPU1":      { "sensor": { "name": "^GPU Power$", "source": "^GPU \\[#0\\]", "unit": "^W$", "demo": 112.4 }, "format": "0.00" },
-    "VGPU1":      { "sensor": { "name": "^GPU Core Voltage$", "source": "^GPU \\[#0\\]", "demo": 0.89 }, "format": "0.000" },
-    "FGPU1":      { "sensor": { "name": "^GPU Fan1$", "source": "^GPU \\[#0\\]", "unit": "RPM", "demo": 1100 }, "format": "0" },
-    "DGPU1":      { "sensor": { "name": "^GPU Fan1$", "source": "^GPU \\[#0\\]", "unit": "%", "demo": 35 }, "format": "0" },
-    "SVMEMUSAGE": { "sensor": { "name": "^GPU Memory Usage$", "source": "^GPU \\[#0\\]", "unit": "%", "demo": 11 }, "format": "0" },
-    "SUSEDVMEM":  { "unit": "MB", "sensor": { "name": "^GPU Memory Allocated$", "source": "^GPU \\[#0\\]", "demo": 3600 }, "format": "0" },
-    "SFREEVMEM":  { "unit": "MB", "sensor": { "name": "^GPU Memory Available$", "source": "^GPU \\[#0\\]", "demo": 29000 }, "format": "0" },
-    "SGPU1USEDDEMEM": { "unit": "MB", "sensor": { "name": "^GPU D3D Memory Dedicated$", "source": "^GPU \\[#0\\]", "demo": 3400 }, "format": "0" },
+    "TGPU1":      { "sensor": { "name": "^GPU Temperature$", "source": "^[di]?GPU \\[#0\\]", "demo": 38 }, "format": "0" },
+    "SGPU1CLK":   { "unit": "MHz", "sensor": { "name": "^GPU Clock$", "source": "^[di]?GPU \\[#0\\]", "demo": 2407 }, "format": "0" },
+    "SGPU1UTI":   { "sensor": { "name": "^GPU Core Load$", "source": "^[di]?GPU \\[#0\\]", "demo": 23 }, "format": "0" },
+    "PGPU1":      { "sensor": { "name": "^GPU Power$", "source": "^[di]?GPU \\[#0\\]", "unit": "^W$", "demo": 112.4 }, "format": "0.00" },
+    "VGPU1":      { "sensor": { "name": "^GPU Core Voltage$", "source": "^[di]?GPU \\[#0\\]", "demo": 0.89 }, "format": "0.000" },
+    "FGPU1":      { "sensor": { "name": "^GPU Fan1$", "source": "^[di]?GPU \\[#0\\]", "unit": "RPM", "demo": 1100 }, "format": "0" },
+    "DGPU1":      { "sensor": { "name": "^GPU Fan1$", "source": "^[di]?GPU \\[#0\\]", "unit": "%", "demo": 35 }, "format": "0" },
+    "SVMEMUSAGE": { "sensor": { "name": "^GPU Memory Usage$", "source": "^[di]?GPU \\[#0\\]", "unit": "%", "demo": 11 }, "format": "0" },
+    "SUSEDVMEM":  { "unit": "MB", "sensor": { "name": "^GPU Memory Allocated$", "source": "^[di]?GPU \\[#0\\]", "demo": 3600 }, "format": "0" },
+    "SFREEVMEM":  { "unit": "MB", "sensor": { "name": "^GPU Memory Available$", "source": "^[di]?GPU \\[#0\\]", "demo": 29000 }, "format": "0" },
+    "SGPU1USEDDEMEM": { "unit": "MB", "sensor": { "name": "^GPU D3D Memory Dedicated$", "source": "^[di]?GPU \\[#0\\]", "demo": 3400 }, "format": "0" },
     "SGPU1PERFCAP": { "text": "-" },
 
     // 12V-2x6 per-pin readings (AIDA "Power Monitor #n") from the Thermal Grizzly WireView

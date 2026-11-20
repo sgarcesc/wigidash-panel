@@ -21,10 +21,10 @@
     "cpuClock":  { "name": "^Core \\d+ Clock$", "source": "^CPU \\[#0\\]", "aggregate": "avg", "scale": 0.001, "demo": 5.22 },
     "cpuPower":  { "name": "^CPU Package Power$", "demo": 71 },
 
-    "gpuTemp":   { "name": "^GPU Temperature$", "unit": "C", "demo": 48 },
-    "gpuLoad":   { "name": "^GPU Core Load$", "demo": 37 },
-    "gpuClock":  { "name": "^GPU Clock$", "demo": 2407 },
-    "gpuPower":  { "name": "^(Total Board Power|GPU Power)$", "unit": "^W$", "demo": 312 },
+    "gpuTemp":   { "name": "^GPU Temperature$", "source": "^[di]?GPU \\[#0\\]", "unit": "C", "demo": 48 },
+    "gpuLoad":   { "name": "^GPU Core Load$", "source": "^[di]?GPU \\[#0\\]", "demo": 37 },
+    "gpuClock":  { "name": "^GPU Clock$", "source": "^[di]?GPU \\[#0\\]", "demo": 2407 },
+    "gpuPower":  { "name": "^(Total Board Power|GPU Power)$", "source": "^[di]?GPU \\[#0\\]", "unit": "^W$", "demo": 312 },
 
     // 12V-2x6 per-pin current (boards that expose it, e.g. ASUS Astral). Edit to match sensors.txt.
     "pin1":      { "name": "Pin ?1 .*Current|12V-2x6 Pin ?1", "demo": 5.1 },
@@ -43,9 +43,9 @@
     "trp":       { "name": "^Trp$", "demo": 36 },
     "tras":      { "name": "^Tras$", "demo": 76 },
 
-    "vramLoad":  { "name": "^GPU Memory Usage$", "unit": "%", "demo": 21 },
-    "vramUsed":  { "name": "^GPU Memory Allocated$", "scale": 0.0009765625, "demo": 6.8 },
-    "vramFree":  { "name": "^GPU Memory Available$", "scale": 0.0009765625, "demo": 25.2 },
+    "vramLoad":  { "name": "^GPU Memory Usage$", "source": "^[di]?GPU \\[#0\\]", "unit": "%", "demo": 21 },
+    "vramUsed":  { "name": "^GPU Memory Allocated$", "source": "^[di]?GPU \\[#0\\]", "scale": 0.0009765625, "demo": 6.8 },
+    "vramFree":  { "name": "^GPU Memory Available$", "source": "^[di]?GPU \\[#0\\]", "scale": 0.0009765625, "demo": 25.2 },
 
     // Cooling loop on the Aqua Computer Octo (AIDA used "Fan #23", "Flow #1", "Temperature #4").
     "pump":      { "name": "^Fan 4$", "source": "Aqua Computer Octo", "unit": "RPM", "demo": 2400 },
