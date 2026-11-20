@@ -6,7 +6,8 @@
     The staged folder is what a release zip contains: the widget DLL, rendered preview images,
     layouts\, fonts\ and install.ps1 (which installs from it with -Prebuilt, without the .NET SDK).
     scripts\install.ps1 uses this script when installing from source; the release workflow runs it
-    with -Version and -Zip to produce dist\wigidash-panel-<version>.zip.
+    with -Version, -Zip and -Installer to produce dist\wigidash-panel-<version>.zip and
+    dist\wigidash-panel-setup-<version>.exe.
 
 .PARAMETER Version
     Version stamped into the widget assembly (e.g. 1.2.0). Defaults to the csproj's <Version>.
@@ -16,12 +17,18 @@
 
 .PARAMETER Zip
     Also zip the staged folder to dist\wigidash-panel-<version>.zip. Requires -Version.
+
+.PARAMETER Installer
+    Also compile installer\wigidash-panel.iss into dist\wigidash-panel-setup-<version>.exe with
+    Inno Setup 6. Requires -Version. When ISCC.exe isn't found this is skipped with a warning,
+    except in CI, where it fails so a release never ships without the installer.
 #>
 [CmdletBinding()]
 param(
     [string]$Version,
     [string]$OutDir,
-    [switch]$Zip
+    [switch]$Zip,
+    [switch]$Installer
 )
 
 $ErrorActionPreference = 'Stop'
@@ -30,6 +37,7 @@ $guid = '56507051-FDDD-447B-B59B-81D78C7CD961'
 $dist = Join-Path $repo 'dist'
 $name = if ($Version) { "wigidash-panel-$Version" } else { 'wigidash-panel' }
 if ($Zip -and -not $Version) { throw '-Zip requires -Version.' }
+if ($Installer -and -not $Version) { throw '-Installer requires -Version.' }
 if (-not $OutDir) { $OutDir = Join-Path $dist $name }
 
 $dotnet = (Get-Command dotnet -ErrorAction SilentlyContinue).Source
@@ -78,4 +86,22 @@ if ($Zip) {
     Write-Host "==> Zipping $zipPath" -ForegroundColor Cyan
     if (Test-Path $zipPath) { Remove-Item $zipPath -Force }
     Compress-Archive -Path (Join-Path $OutDir '*') -DestinationPath $zipPath
+}
+
+if ($Installer) {
+    $iscc = (Get-Command ISCC.exe -ErrorAction SilentlyContinue).Source
+    if (-not $iscc) {
+        $iscc = @(${env:ProgramFiles(x86)}, $env:ProgramFiles, (Join-Path $env:LOCALAPPDATA 'Programs')) |
+            Where-Object { $_ } | ForEach-Object { Join-Path $_ 'Inno Setup 6\ISCC.exe' } |
+            Where-Object { Test-Path $_ } | Select-Object -First 1
+    }
+    if (-not $iscc) {
+        if ($env:CI) { throw 'Inno Setup 6 (ISCC.exe) not found.' }
+        Write-Warning 'Inno Setup 6 (ISCC.exe) not found, so the installer was skipped. Get it from https://jrsoftware.org/isinfo.php.'
+    } else {
+        Write-Host "==> Building installer dist\wigidash-panel-setup-$Version.exe" -ForegroundColor Cyan
+        $iss = Join-Path $repo 'installer\wigidash-panel.iss'
+        & $iscc /Q "/DVersion=$Version" "/DSourceDir=$((Resolve-Path $OutDir).Path)" "/DOutputDir=$dist" $iss
+        if ($LASTEXITCODE) { throw 'Installer build failed.' }
+    }
 }
