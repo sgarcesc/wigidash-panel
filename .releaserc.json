@@ -13,7 +13,8 @@
     [
       "@semantic-release/github",
       {
-        "assets": [{ "path": "dist/*.zip" }, { "path": "dist/*.exe" }]
+        "assets": [{ "path": "dist/*.zip" }, { "path": "dist/*.exe" }],
+        "draftRelease": true
       }
     ]
   ]
