@@ -131,16 +131,17 @@
       <h2>Install</h2>
       <p>You need WigiDash Manager. You don't need the .NET SDK.</p>
       <ol class="steps">
-        <li>Download <code>wigidash-panel-X.Y.Z.zip</code> from the
-          <a href="https://github.com/sgarcesc/wigidash-panel/releases/latest">latest release</a>
-          and extract it.</li>
-        <li>In the extracted folder, run:
-          <pre><code>powershell -ExecutionPolicy Bypass -File .\install.ps1</code></pre>
-          The script closes WigiDash Manager, copies the widget into place and restarts the
-          Manager.</li>
+        <li>Download <code>wigidash-panel-setup-X.Y.Z.exe</code> from the
+          <a href="https://github.com/sgarcesc/wigidash-panel/releases/latest">latest release</a>.</li>
+        <li>Run it. It doesn't need admin rights. The installer closes WigiDash Manager, copies the
+          widget into place and restarts the Manager.</li>
         <li>In WigiDash Manager, add a page and drop <strong>Sensor Panel</strong> onto it at size
           5×4.</li>
       </ol>
+      <p>To upgrade, run a newer installer. To uninstall, use <strong>Apps &amp; features</strong>.
+        The installer isn't code-signed yet, so SmartScreen may warn about it: click
+        <strong>More info</strong>, then <strong>Run anyway</strong>. Each release also has a zip
+        with a PowerShell install script; the README explains how to use it.</p>
       <p>To build from source, edit layouts, or see the full layout format, read the
         <a href="https://github.com/sgarcesc/wigidash-panel#readme">README</a>.</p>
     </section>

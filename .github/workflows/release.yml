@@ -37,6 +37,15 @@ jobs:
 
       - run: dotnet test tests/WigiPanel.Tests -c Release
 
+      # package.ps1 -Installer needs Inno Setup 6 and fails in CI without it. Install it if the
+      # runner image doesn't ship it.
+      - name: Ensure Inno Setup 6
+        shell: pwsh
+        run: |
+          if (-not (Test-Path "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe")) {
+            choco install innosetup -y --no-progress
+          }
+
       # Builds against stubs/WigiDashWidgetFramework, since WigiDash Manager isn't installed here.
       - run: npx semantic-release
         env:

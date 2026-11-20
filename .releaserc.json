@@ -7,13 +7,13 @@
     [
       "@semantic-release/exec",
       {
-        "prepareCmd": "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/package.ps1 -Version ${nextRelease.version} -Zip"
+        "prepareCmd": "pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/package.ps1 -Version ${nextRelease.version} -Zip -Installer"
       }
     ],
     [
       "@semantic-release/github",
       {
-        "assets": [{ "path": "dist/*.zip" }]
+        "assets": [{ "path": "dist/*.zip" }, { "path": "dist/*.exe" }]
       }
     ]
   ]

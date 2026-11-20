@@ -27,16 +27,33 @@ all the native skins at full size.
 
 Requirements: WigiDash Manager. You don't need the .NET SDK.
 
-1. Download `wigidash-panel-X.Y.Z.zip` from the
-   [latest release](https://github.com/sgarcesc/wigidash-panel/releases/latest) and extract it.
+1. Download `wigidash-panel-setup-X.Y.Z.exe` from the
+   [latest release](https://github.com/sgarcesc/wigidash-panel/releases/latest).
+2. Run it. It doesn't need admin rights.
+
+The installer closes WigiDash Manager, copies the widget into place and restarts the Manager. Then,
+in WigiDash Manager, add a page and drop **Sensor Panel** onto it at size 5×4. To upgrade, run a
+newer installer over the old one. To uninstall, use **Apps & features**. Uninstalling removes the
+files the installer shipped and leaves any skins and fonts you added. If WigiDash Manager is
+running, the uninstaller warns you, closes it while it removes the widget, and starts it again
+afterwards.
+
+The installer isn't code-signed yet, so SmartScreen may show "Windows protected your PC". Click
+**More info**, then **Run anyway**.
+
+<details>
+<summary>Alternative: the zip and <code>install.ps1</code></summary>
+
+1. Download `wigidash-panel-X.Y.Z.zip` from the same release and extract it.
 2. In the extracted folder, run:
 
    ```powershell
    powershell -ExecutionPolicy Bypass -File .\install.ps1
    ```
 
-The script closes WigiDash Manager, copies the widget into place and restarts the Manager. Then,
-in WigiDash Manager, add a page and drop **Sensor Panel** onto it at size 5×4.
+The script does the same steps as the installer, but it doesn't add an uninstaller.
+
+</details>
 
 ### From source
 
@@ -47,7 +64,9 @@ Requirements: WigiDash Manager and the .NET SDK (8 or later; it builds the `net4
 ```
 
 This builds the widget and renders the preview images first, then installs the same way.
-`.\scripts\package.ps1 -Version 1.2.3 -Zip` produces the release zip locally in `dist\`.
+`.\scripts\package.ps1 -Version 1.2.3 -Zip -Installer` produces the release zip and installer locally
+in `dist\`. The installer needs [Inno Setup 6](https://jrsoftware.org/isinfo.php); without it, that step
+is skipped with a warning.
 
 If WigiDash Manager isn't installed, the build compiles against the API stub in
 `stubs/WigiDashWidgetFramework` instead of the Manager's `WigiDashWidgetFramework.dll`, which
@@ -195,7 +214,8 @@ tests/              xUnit tests: layout bindings vs. saved sensor lists
 stubs/              compile-only WigiDashWidgetFramework API stub (used when the Manager isn't installed)
 layouts/            layouts (default.json recreates the G.Skill AIDA64 panel)
 scripts/install.ps1 install into WigiDash Manager (builds first, or -Prebuilt from a release zip)
-scripts/package.ps1 build + stage the release files (and zip them with -Zip)
+scripts/package.ps1 build + stage the release files (zip with -Zip, installer .exe with -Installer)
+installer/          Inno Setup script for the release installer (compiled by package.ps1 -Installer)
 site/               GitHub Pages site (pwsh site/build.ps1 -> _site/; deployed by .github/workflows/pages.yml)
 .releaserc.json     semantic-release config (used by .github/workflows/release.yml)
 ```
