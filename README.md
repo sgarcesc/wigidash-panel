@@ -1,5 +1,6 @@
 # wigidash-panel
 
+[![CodeQL](https://github.com/sgarcesc/wigidash-panel/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/sgarcesc/wigidash-panel/actions/workflows/github-code-scanning/codeql)
 [![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/sgarcesc/wigidash-panel/badge)](https://scorecard.dev/viewer/?uri=github.com/sgarcesc/wigidash-panel)
 
 A free-form sensor panel widget for the **G.Skill WigiDash**. It replaces the AIDA64 SensorPanel
