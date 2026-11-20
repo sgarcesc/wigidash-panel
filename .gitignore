@@ -433,3 +433,6 @@ live-frame.png
 
 # Release packages (scripts/package.ps1)
 dist/
+
+# GitHub Pages build output (site/build.ps1)
+_site/
