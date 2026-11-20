@@ -2,75 +2,41 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-## What this is
+# Commands
 
-A G.Skill WigiDash widget (`net472` class library). The widget draws a full-screen sensor dashboard
-from a JSON layout or an imported AIDA64 skin, using the HWiNFO sensor data that WigiDash Manager
-already collects. Everything is Windows-only: it uses WPF and System.Drawing/GDI+.
+- Test: `dotnet test tests\WigiPanel.Tests` (CI adds `-c Release`)
+- Single test: `dotnet test tests\WigiPanel.Tests --filter "FullyQualifiedName~Integrated_only"`
+- Check a layout visually without the device: `dotnet build tools\Preview -c Release`, then
+  `tools\Preview\bin\Release\wigipanel-preview.exe layouts\<name>.json out.png [width height]`
+  (renders each binding's `demo` value)
+- No linter. `npm` exists only for semantic-release.
+- `scripts\install.ps1` closes and restarts WigiDash Manager. Don't run it unless asked.
 
-## Commands
+# Conventions
 
-```powershell
-dotnet test tests\WigiPanel.Tests                                    # all tests (CI uses -c Release)
-dotnet test tests\WigiPanel.Tests --filter "FullyQualifiedName~Integrated_only"   # single test
-dotnet build tools\Preview -c Release                                # offline renderer
-tools\Preview\bin\Release\wigipanel-preview.exe layouts\default.json out.png [width height]
-.\scripts\install.ps1                                                # build + install into WigiDash Manager (restarts it)
-.\scripts\package.ps1 -Version 1.2.3 -Zip                            # release zip -> dist\
-pwsh designs\make-designs.ps1                                        # regenerate native skin JSON in layouts\
-```
+- Native skin JSON in `layouts/` (everything except `default.json` and `aida-sensors.json`) is
+  generated. Edit `designs/make-designs.ps1` and re-run it with `pwsh designs\make-designs.ps1`.
+  Don't hand-edit the generated files.
+- When HWiNFO renames sensors, add a fixture to `tests/WigiPanel.Tests/Fixtures`. A fixture is a
+  `sensors.txt` saved with the widget's **Sensor list** button.
+- Commit messages are Conventional Commits, and semantic-release cuts a release on every push to
+  `main`: `fix:` gives a patch, `feat:` a minor release and `BREAKING CHANGE:` a major one.
+  `docs:`, `ci:` and `chore:` don't release. Tags are plain `X.Y.Z`, with no `v`.
+- PRs are squash-merged, so PR titles must also follow Conventional Commits. The title becomes the
+  commit on `main`.
+- Don't commit AIDA64 skins (`.gslcd`/`.sensorpanel`). They're third-party work.
 
-There is no linter. `npm` (`package.json`) is used only for semantic-release.
+# Gotchas
 
-## Build quirks
-
-- The assembly is named after the widget GUID (`56507051-FDDD-447B-B59B-81D78C7CD961`), because the
+- The assembly name is the widget GUID (`56507051-FDDD-447B-B59B-81D78C7CD961`), because WigiDash
   Manager loads `Widgets\<GUID>\<GUID>.dll`. Don't rename it.
-- `WigiDashWidgetFramework.dll` comes from the Manager install (`$(WigiDashDir)`). If it's missing
-  (CI, forks), `UseFrameworkStub` builds against `stubs/WigiDashWidgetFramework` instead. The stub
-  is compile-only and must never ship. If you use a framework API the stub lacks, add it to
-  `stubs/WigiDashWidgetFramework/Api.cs`, or CI breaks.
-- Tests and the Preview tool also target `net472`, so they exercise the same code the Manager loads.
-
-## Architecture
-
-Data flows from layout loading, to sensor binding, to rendering:
-
-- **`Layout/`**: `LayoutLoader.Load` is the single entry point. JSON files go through `Parse`, which
-  allows `//` comments. `.gslcd`/`.sensorpanel` files go through `Aida/AidaSkinImporter`, which
-  converts the AIDA tag format (with hex-embedded images and gauge frame strips) into the same
-  `PanelLayout` model. AIDA sensor IDs are translated by `aida-sensors.json` maps, layered from
-  lowest to highest priority: widget default, then skin folder, then `<skin>.aida-sensors.json`
-  (see `AidaMapFiles`). `SensorMatcher` handles the regex matching of bindings (name/source/unit).
-  `SkinCatalog` lists skins for the settings UI and ◀ ▶ switching.
-- **`Rendering/`**: has no WigiDash dependency, which is why the Preview tool and tests can use it.
-  `PanelRenderer` draws a `PanelLayout` with GDI+ from an `IValueSource`. `LayoutValueSource`
-  sends bindings marked `"system"` to `SystemSensors` (drive space, volume, refresh rate, uptime,
-  all computed locally) and everything else to the inner source. The inner source is
-  `DemoValueSource` (each binding's `demo` value) in the preview, and `SensorHub` on the device.
-- **`Widget/`**: `PanelWidget`/`PanelInstance` implement the SDK's `IWidgetObject`/`IWidgetInstance`.
-  `PanelInstance` runs a timer tick, renders a frame and raises `WidgetUpdated`. It reloads the
-  layout on file change with a debounce. `SensorHub` resolves bindings against
-  `IWidgetManager.GetSensorList()` and subscribes to `SensorUpdated`. **Its threading rules are
-  documented in its class remarks.** The callback takes no locks, and binding work must stay off
-  the UI thread, because the Manager raises events on its own thread and may hold locks while
-  doing so. Read those remarks before you touch it.
-
-Geometry: layouts are designed on a 1024×600 canvas. A 5×4 widget is 1016×592 and is shown centred
-with a 4 px crop.
-
-## Conventions
-
-- **Native skins** (`layouts/{Monsters,Nord Frost,...}.json`) are generated by
-  `designs/make-designs.ps1`, which defines the shared sensor bindings once. Edit the script and
-  re-run it rather than hand-editing that JSON. `layouts/default.json` and `aida-sensors.json` are
-  hand-maintained.
-- **GPU binding tests** (`GpuBindingTests`) check every GPU binding in `layouts/` against saved
-  HWiNFO sensor lists in `tests/WigiPanel.Tests/Fixtures`. These cover new `dGPU`/`iGPU` names,
-  legacy `GPU` names, dual dGPU and iGPU-only setups. When HWiNFO renames sensors, add a new
-  fixture: a `sensors.txt` saved with the **Sensor list** button in the widget settings.
-- **Releases** are automatic. semantic-release runs on every push to `main` (`release.yml`), and
-  Conventional Commit types decide the version: `fix:` gives a patch, `feat:` a minor release and
-  `BREAKING CHANGE:` a major one. Other types (`docs:`, `ci:`, `chore:`) don't release. Tags are
-  plain `X.Y.Z` with no `v`. PRs run `test.yml`.
-- AIDA64 skins are third-party work and none are committed to the repo.
+- When WigiDash Manager isn't installed (CI, forks), the build compiles against
+  `stubs/WigiDashWidgetFramework` instead of the real framework DLL. Any newly used framework API
+  must also be added to `stubs/WigiDashWidgetFramework/Api.cs`, or CI fails. The stub is
+  compile-only and must never ship.
+- `src/WigiPanel/Rendering/` must not reference WigiDash types. The Preview tool and the tests use
+  it without the Manager.
+- `Widget/SensorHub.cs` runs on the Manager's sensor thread, and the Manager may hold locks there.
+  Follow the threading rules in its class remarks: no locks in `OnSensorUpdated`, and no binding
+  work on the UI thread.
+- Everything targets `net472` with WPF/GDI+, so it builds and runs on Windows only.
