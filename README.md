@@ -50,6 +50,18 @@ If WigiDash Manager isn't installed, the build compiles against the API stub in
 `stubs/WigiDashWidgetFramework` instead of the Manager's `WigiDashWidgetFramework.dll`, which
 can't be redistributed. The stub is never shipped; at runtime the Manager supplies the real one.
 
+### Tests
+
+```powershell
+dotnet test tests\WigiPanel.Tests
+```
+
+The tests run every GPU binding in `layouts/` against saved sensor lists in
+`tests/WigiPanel.Tests/Fixtures`. The fixtures cover current and older HWiNFO GPU naming, two
+discrete GPUs, and integrated graphics only. When HWiNFO renames something, save a fresh
+`sensors.txt` (the **Sensor list** button) as a new fixture. Pull requests run the tests through
+`.github/workflows/test.yml`.
+
 ### Releases
 
 Releases are cut automatically by [semantic-release](https://github.com/semantic-release/semantic-release)
@@ -176,6 +188,7 @@ src/WigiPanel/      widget (net472 class library, assembly named after the widge
   Rendering/        GDI+ renderer, template engine, system info (no WigiDash dependency)
   Widget/           IWidgetObject / IWidgetInstance, sensor binding, settings UI
 tools/Preview/      offline renderer: layout -> PNG
+tests/              xUnit tests: layout bindings vs. saved sensor lists
 stubs/              compile-only WigiDashWidgetFramework API stub (used when the Manager isn't installed)
 layouts/            layouts (default.json recreates the G.Skill AIDA64 panel)
 scripts/install.ps1 install into WigiDash Manager (builds first, or -Prebuilt from a release zip)
