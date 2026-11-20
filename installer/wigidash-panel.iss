@@ -64,6 +64,12 @@ Source: "{#SourceDir}\fonts\*"; DestDir: "{app}\fonts"; Flags: ignoreversion rec
 ; Removed on uninstall only if it's empty.
 Name: "{app}\fonts"
 
+[UninstallDelete]
+; Written by the widget at runtime, so not in [Files]. Without these the widget folder can never be
+; removed. Only these two files: the user's own skins and fonts keep their folders.
+Type: files; Name: "{app}\sensors.txt"
+Type: files; Name: "{app}\layouts\live-frame.png"
+
 [Run]
 ; Skipped when the Manager isn't at its default location, and in silent installs when the Manager
 ; wasn't running beforehand. Not skipifsilent: a silent upgrade still closes the Manager through
@@ -82,8 +88,23 @@ begin
   Result := FileExists(ExpandConstant('{#ManagerExe}'));
 end;
 
+function GetCurrentProcessId: DWORD;
+  external 'GetCurrentProcessId@kernel32.dll stdcall';
+function ProcessIdToSessionId(ProcessId: DWORD; var SessionId: DWORD): BOOL;
+  external 'ProcessIdToSessionId@kernel32.dll stdcall';
+
+// This user's Windows session. Other users' Managers (fast user switching) live in other sessions;
+// this installer can neither close nor restart those, so they must not count.
+function CurrentSession: String;
+var
+  SessionId: DWORD;
+begin
+  if not ProcessIdToSessionId(GetCurrentProcessId, SessionId) then SessionId := 0;
+  Result := IntToStr(SessionId);
+end;
+
 // Assumes the Manager is running when WMI can't be queried; the callers then do one harmless
-// extra step (a prompt or a start) instead of skipping a needed one.
+// extra step (a start, or a taskkill that finds nothing) instead of skipping a needed one.
 function IsManagerRunning: Boolean;
 var
   Locator, Service, Processes: Variant;
@@ -92,7 +113,8 @@ begin
   try
     Locator := CreateOleObject('WbemScripting.SWbemLocator');
     Service := Locator.ConnectServer('.', 'root\CIMV2');
-    Processes := Service.ExecQuery('SELECT ProcessId FROM Win32_Process WHERE Name = ''WigiDashManager.exe''');
+    Processes := Service.ExecQuery('SELECT ProcessId FROM Win32_Process WHERE Name = ''WigiDashManager.exe'''
+      + ' AND SessionId = ' + CurrentSession);
     Result := Processes.Count > 0;
   except
   end;
@@ -111,16 +133,13 @@ begin
   Result := ManagerInstalled and (ManagerWasRunning or not WizardSilent);
 end;
 
-// The uninstaller doesn't use Restart Manager, so the Manager is closed here; otherwise the loaded
-// widget DLL is locked and can't be removed. Interactive uninstalls ask first.
+// The uninstaller doesn't use Restart Manager, so the Manager is closed at usUninstall; otherwise
+// the loaded widget DLL is locked and can't be removed. Interactive uninstalls warn about this in
+// Inno's own confirmation (ConfirmUninstall below), so there's only one dialog.
 function InitializeUninstall: Boolean;
 begin
-  Result := True;
   ManagerWasRunning := IsManagerRunning;
-  if ManagerWasRunning and not UninstallSilent then
-    Result := MsgBox('WigiDash Manager must be closed to remove the widget. Save any unsaved '
-      + 'changes in it first.' + #13#10#13#10 + 'Close WigiDash Manager and continue? It will be '
-      + 'started again afterwards.', mbConfirmation, MB_OKCANCEL) = IDOK;
+  Result := True;
 end;
 
 procedure CurUninstallStepChanged(CurUninstallStep: TUninstallStep);
@@ -129,8 +148,8 @@ var
 begin
   if not ManagerWasRunning then Exit;
   if CurUninstallStep = usUninstall then begin
-    if Exec(ExpandConstant('{sys}\taskkill.exe'), '/F /IM WigiDashManager.exe', '', SW_HIDE,
-        ewWaitUntilTerminated, ResultCode) and (ResultCode = 0) then
+    if Exec(ExpandConstant('{sys}\taskkill.exe'), '/F /IM WigiDashManager.exe /FI "SESSION eq '
+        + CurrentSession + '"', '', SW_HIDE, ewWaitUntilTerminated, ResultCode) and (ResultCode = 0) then
       // The DLL can stay locked for a few seconds after the process exits.
       Sleep(3000);
   end else if (CurUninstallStep = usPostUninstall) and ManagerInstalled then
@@ -139,4 +158,5 @@ begin
 end;
 
 [Messages]
+ConfirmUninstall=Are you sure you want to completely remove %1 and all of its components?%n%nIf WigiDash Manager is running, it will be closed while the widget is removed and started again afterwards. Save any unsaved changes in it first.
 FinishedLabel=Setup has installed [name] into WigiDash Manager.%n%nIn WigiDash Manager, add a page and drop Sensor Panel onto it at size 5x4.
