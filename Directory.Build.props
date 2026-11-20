@@ -3,5 +3,10 @@
     <!-- net472 projects default to auditing direct packages only; also report vulnerable transitive ones. -->
     <NuGetAudit>true</NuGetAudit>
     <NuGetAuditMode>all</NuGetAuditMode>
+
+    <!-- New compiler warnings fail the build. Vulnerability advisories (NU1901-NU1904) stay warnings:
+         a newly published advisory shouldn't break every build; Dependabot handles those. -->
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WarningsNotAsErrors>$(WarningsNotAsErrors);NU1901;NU1902;NU1903;NU1904</WarningsNotAsErrors>
   </PropertyGroup>
 </Project>
