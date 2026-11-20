@@ -4,24 +4,30 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+    inputs:
+      attest-tag:
+        description: Attest the files of this existing release (e.g. 1.2.3) instead of releasing
+        required: false
+        default: ''
 
 # Never run two releases at once; a newer push waits for the current one to finish.
 concurrency:
   group: release
   cancel-in-progress: false
 
-permissions:
-  contents: write       # create tags and GitHub Releases, upload the zip
-  issues: write         # comment on issues fixed by a release
-  pull-requests: write  # comment on PRs included in a release
-  id-token: write           # Sigstore signing certificate for the build provenance attestation
-  attestations: write       # store the attestation
-  artifact-metadata: write  # artifact storage record for the attested files
+permissions: {}
 
 jobs:
   release:
+    if: inputs.attest-tag == ''
     # The widget targets net472 and uses WPF/System.Drawing, so build on Windows.
     runs-on: windows-latest
+    permissions:
+      contents: write       # create tags and GitHub Releases, upload the zip and installer
+      issues: write         # comment on issues fixed by a release
+      pull-requests: write  # comment on PRs included in a release
+    outputs:
+      tag: ${{ steps.tag.outputs.tag }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -55,11 +61,39 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      # Signed SLSA build provenance for the release files, checkable with `gh attestation verify`.
-      # dist/ only has a zip when semantic-release cut a release (its prepare step builds them).
-      - name: Attest release files
-        if: hashFiles('dist/*.zip') != ''
-        uses: actions/attest@1e69f48acb82d1966a394da916b4c1698aa569d6 # v4.2.2
+      # semantic-release tags HEAD when it cuts a release; empty when there was nothing to release.
+      - name: Find release tag
+        id: tag
+        shell: pwsh
+        run: |
+          $tag = git tag --points-at HEAD | Where-Object { $_ -match '^\d+\.\d+\.\d+$' } | Select-Object -First 1
+          "tag=$tag" >> $env:GITHUB_OUTPUT
+
+  # Signed SLSA build provenance for the published release files, checkable with
+  # `gh attestation verify`. A separate job so only these steps (no npm, NuGet or semantic-release
+  # code) can mint an OIDC token, and so it can be re-run alone if attesting fails. It attests the
+  # files as downloaded from the release, i.e. exactly what users get.
+  attest:
+    needs: release
+    if: >-
+      always() &&
+      (inputs.attest-tag != '' || (needs.release.result == 'success' && needs.release.outputs.tag != ''))
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read     # download the release assets
+      id-token: write    # Sigstore signing certificate
+      attestations: write
+    steps:
+      - name: Download release files
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ inputs.attest-tag || needs.release.outputs.tag }}
+        run: |
+          [[ "$TAG" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]] || { echo "Not a release tag: $TAG"; exit 1; }
+          gh release download "$TAG" --repo "$GITHUB_REPOSITORY" --dir dist --pattern '*.zip' --pattern '*.exe'
+          ls -l dist
+
+      - uses: actions/attest@1e69f48acb82d1966a394da916b4c1698aa569d6 # v4.2.2
         with:
           subject-path: |
             dist/*.zip

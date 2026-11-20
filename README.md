@@ -45,7 +45,8 @@ To check that a download was built by this repository's release workflow and has
 verify its build provenance attestation with the [GitHub CLI](https://cli.github.com/):
 
 ```powershell
-gh attestation verify wigidash-panel-setup-X.Y.Z.exe -R sgarcesc/wigidash-panel
+gh attestation verify wigidash-panel-setup-X.Y.Z.exe -R sgarcesc/wigidash-panel `
+  --signer-workflow sgarcesc/wigidash-panel/.github/workflows/release.yml
 ```
 
 The same command works for the zip. Releases made before attestations were added have none.
@@ -100,6 +101,11 @@ Releases are cut automatically by [semantic-release](https://github.com/semantic
 [Conventional Commits](https://www.conventionalcommits.org/) since the last release: `fix:` makes a
 patch release, `feat:` a minor one and a `BREAKING CHANGE:` footer a major one. Other types
 (`chore:`, `docs:`, ...) don't trigger a release. Versions are plain `X.Y.Z`, with no `v` prefix.
+
+After a release is published, the workflow's `attest` job downloads its zip and installer and
+attaches signed build provenance. If that job fails, re-run it alone from the workflow run. To
+attest an existing release by hand, run the workflow with the release's tag:
+`gh workflow run release.yml -f attest-tag=X.Y.Z`.
 
 ## Editing the layout
 
