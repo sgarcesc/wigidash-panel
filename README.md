@@ -1,5 +1,7 @@
 # wigidash-panel
 
+[![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/sgarcesc/wigidash-panel/badge)](https://scorecard.dev/viewer/?uri=github.com/sgarcesc/wigidash-panel)
+
 A free-form sensor panel widget for the **G.Skill WigiDash**. It replaces the AIDA64 SensorPanel
 setup without the WigiDash grid look. You place one widget at **5×4** and it draws a full-screen
 dashboard from a JSON layout file, using the sensor data that WigiDash Manager already collects
