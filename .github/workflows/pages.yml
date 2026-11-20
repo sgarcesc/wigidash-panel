@@ -1,0 +1,47 @@
+name: Pages
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - site/**
+      - designs/**
+      - docs/**
+      - .github/workflows/pages.yml
+  workflow_dispatch:
+
+# One deployment at a time; a newer push waits rather than cancelling one already deploying.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  pages: write     # deploy to GitHub Pages
+  id-token: write  # verify the deployment comes from this workflow
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/configure-pages@v6
+
+      # Copies site/, docs/preview.png and designs/*.png into _site/ and fills the skin gallery.
+      - run: ./site/build.ps1
+        shell: pwsh
+
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v5
