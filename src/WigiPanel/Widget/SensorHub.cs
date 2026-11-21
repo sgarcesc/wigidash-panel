@@ -37,7 +37,13 @@ namespace WigiPanel.Widget
         private volatile HashSet<string> monitoredIds = new HashSet<string>();
         private readonly List<SensorItem> monitored = new List<SensorItem>();
         private volatile Dictionary<string, SensorBinding> bindings = new Dictionary<string, SensorBinding>();
-        private int lastSensorCount = -1;
+        // Signature of the last sensor list written to SensorDumpPath (-1 forces a re-dump).
+        private int dumpedSignature = -1;
+        // Size and signature of the last sensor list fetched. Guarded by bindGate.
+        private int listCount;
+        private int listSignature;
+        // Guarded by bindGate. See RescanSchedule for why GetSensorList() must be called rarely.
+        private RescanSchedule rescan = new RescanSchedule(Environment.TickCount, 0);
         private bool subscribed;
         private volatile bool disposed;
 
@@ -58,22 +64,28 @@ namespace WigiPanel.Widget
                 if (disposed) return;
                 ReleaseAll();
                 bindings = newBindings ?? new Dictionary<string, SensorBinding>();
-                lastSensorCount = -1;
+                dumpedSignature = -1;
                 BindCore();
+                rescan = new RescanSchedule(Environment.TickCount, listSignature);
             }
         }
 
         /// <summary>
-        /// Matches still-unbound keys against the current sensor list. The Manager's list can be
-        /// incomplete for a while after start-up while HWiNFO initialises, so this is retried.
+        /// Re-matches bindings while some key is unbound (the Manager's list can be empty or
+        /// incomplete while HWiNFO initialises), as often as <see cref="RescanSchedule"/> allows.
+        /// A bound key that goes silent is left alone: the Manager's list is a snapshot, so a
+        /// rescan could not re-match it. Cheap when there is nothing to do.
         /// Never blocks: if another thread is binding, this attempt is skipped.
         /// </summary>
-        public void TryBind()
+        public void MaybeRescan()
         {
+            if (Unbound.Count == 0) return;
             if (!Monitor.TryEnter(bindGate)) return;
             try
             {
-                if (!disposed) BindCore();
+                if (disposed || !rescan.IsDue(Environment.TickCount, Unbound.Count > 0)) return;
+                bool changed = BindCore();
+                rescan.Scanned(Environment.TickCount, listCount, listSignature, changed);
             }
             finally
             {
@@ -107,21 +119,22 @@ namespace WigiPanel.Widget
             }
         }
 
-        private void BindCore()
+        /// <summary>Returns whether any binding now reads different sensors than before.</summary>
+        private bool BindCore()
         {
-            if (manager == null) return;
+            if (manager == null) return false;
             List<SensorItem> all;
             try { all = manager.GetSensorList() ?? new List<SensorItem>(); }
-            catch { return; }
+            catch { return false; }
+            var before = itemsByKey;
 
             // Re-dump when the set of sensor sources changes, not just the count
             // (switching foreground apps renames the PresentMon source without changing the count).
-            int signature = all.Count;
-            foreach (var src in all.Select(s => s.Source ?? "").Distinct())
-                signature = unchecked(signature * 31 + src.GetHashCode());
-            if (signature != lastSensorCount)
+            listCount = all.Count;
+            listSignature = RescanSchedule.ListSignature(all.Count, all.Select(s => s.Source));
+            if (listSignature != dumpedSignature)
             {
-                lastSensorCount = signature;
+                dumpedSignature = listSignature;
                 DumpSensors(all);
             }
 
@@ -176,6 +189,8 @@ namespace WigiPanel.Widget
                 manager.SensorUpdated += OnSensorUpdated;
                 subscribed = true;
             }
+
+            return RescanSchedule.BindingsChanged(before, byKey);
         }
 
         private void OnSensorUpdated(SensorItem item, double value)
