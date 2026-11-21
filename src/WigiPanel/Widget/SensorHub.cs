@@ -37,16 +37,14 @@ namespace WigiPanel.Widget
         private volatile HashSet<string> monitoredIds = new HashSet<string>();
         private readonly List<SensorItem> monitored = new List<SensorItem>();
         private volatile Dictionary<string, SensorBinding> bindings = new Dictionary<string, SensorBinding>();
-        private int lastSensorCount = -1;
+        // Signature of the last sensor list written to SensorDumpPath (-1 forces a re-dump).
+        private int dumpedSignature = -1;
+        // Size and signature of the last sensor list fetched. Guarded by bindGate.
+        private int listCount;
+        private int listSignature;
         // Guarded by bindGate. See RescanSchedule for why GetSensorList() must be called rarely.
-        private RescanSchedule rescan = new RescanSchedule(Environment.TickCount);
+        private RescanSchedule rescan = new RescanSchedule(Environment.TickCount, 0);
         private bool subscribed;
-
-        /// <summary>
-        /// A bound key whose sensors have all been silent this long counts as gone (the Manager
-        /// reports every monitored sensor every 500 ms while its reading is valid).
-        /// </summary>
-        private const int SilentMs = 30000;
         private volatile bool disposed;
 
         public SensorHub(IWidgetManager manager)
@@ -66,51 +64,33 @@ namespace WigiPanel.Widget
                 if (disposed) return;
                 ReleaseAll();
                 bindings = newBindings ?? new Dictionary<string, SensorBinding>();
-                lastSensorCount = -1;
+                dumpedSignature = -1;
                 BindCore();
-                rescan = new RescanSchedule(Environment.TickCount);
+                rescan = new RescanSchedule(Environment.TickCount, listSignature);
             }
         }
 
         /// <summary>
-        /// Re-matches bindings when some key is unbound (the Manager's list can be incomplete
-        /// while HWiNFO initialises) or has stopped reporting (its sensor may have vanished),
-        /// as often as <see cref="RescanSchedule"/> allows. Cheap when there is nothing to do.
+        /// Re-matches bindings while some key is unbound (the Manager's list can be empty or
+        /// incomplete while HWiNFO initialises), as often as <see cref="RescanSchedule"/> allows.
+        /// A bound key that goes silent is left alone: the Manager's list is a snapshot, so a
+        /// rescan could not re-match it. Cheap when there is nothing to do.
         /// Never blocks: if another thread is binding, this attempt is skipped.
         /// </summary>
         public void MaybeRescan()
         {
-            int now = Environment.TickCount;
-            bool needed = Unbound.Count > 0 || AnyKeySilent(now);
+            if (Unbound.Count == 0) return;
             if (!Monitor.TryEnter(bindGate)) return;
             try
             {
-                if (disposed || !rescan.IsDue(now, needed)) return;
+                if (disposed || !rescan.IsDue(Environment.TickCount, Unbound.Count > 0)) return;
                 bool changed = BindCore();
-                rescan.Scanned(Environment.TickCount, changed);
+                rescan.Scanned(Environment.TickCount, listCount, listSignature, changed);
             }
             finally
             {
                 Monitor.Exit(bindGate);
             }
-        }
-
-        private bool AnyKeySilent(int now)
-        {
-            foreach (var ids in itemsByKey.Values)
-            {
-                bool silent = true;
-                foreach (var id in ids)
-                {
-                    if (lastSeen.TryGetValue(id, out var seen) && unchecked(now - seen) <= SilentMs)
-                    {
-                        silent = false;
-                        break;
-                    }
-                }
-                if (silent && ids.Length > 0) return true;
-            }
-            return false;
         }
 
         public double? Get(string key)
@@ -150,12 +130,11 @@ namespace WigiPanel.Widget
 
             // Re-dump when the set of sensor sources changes, not just the count
             // (switching foreground apps renames the PresentMon source without changing the count).
-            int signature = all.Count;
-            foreach (var src in all.Select(s => s.Source ?? "").Distinct())
-                signature = unchecked(signature * 31 + src.GetHashCode());
-            if (signature != lastSensorCount)
+            listCount = all.Count;
+            listSignature = RescanSchedule.ListSignature(all.Count, all.Select(s => s.Source));
+            if (listSignature != dumpedSignature)
             {
-                lastSensorCount = signature;
+                dumpedSignature = listSignature;
                 DumpSensors(all);
             }
 
@@ -196,8 +175,6 @@ namespace WigiPanel.Widget
                     {
                         try { manager.AddMonitoringItem(item); monitored.Add(item); }
                         catch { /* keep the binding; values just won't arrive */ }
-                        // Start the silence clock at bind time (Get() also needs a value, so this shows nothing).
-                        lastSeen.TryAdd(id, Environment.TickCount);
                     }
                 }
                 byKey[kv.Key] = matches.Select(Identity).Distinct().ToArray();
@@ -213,8 +190,7 @@ namespace WigiPanel.Widget
                 subscribed = true;
             }
 
-            return byKey.Count != before.Count
-                || byKey.Any(kv => !before.TryGetValue(kv.Key, out var old) || !old.SequenceEqual(kv.Value));
+            return RescanSchedule.BindingsChanged(before, byKey);
         }
 
         private void OnSensorUpdated(SensorItem item, double value)

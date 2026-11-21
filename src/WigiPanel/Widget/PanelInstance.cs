@@ -292,7 +292,7 @@ namespace WigiPanel.Widget
 
         private void TickCore()
         {
-            // Re-resolve unmatched or silent bindings, with backoff: each sensor-list fetch makes
+            // Re-resolve unmatched bindings, with backoff: each sensor-list fetch makes
             // WigiDash Manager permanently slower (see RescanSchedule).
             sensors.MaybeRescan();
 
