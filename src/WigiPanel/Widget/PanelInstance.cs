@@ -34,7 +34,6 @@ namespace WigiPanel.Widget
         private volatile string layoutPath;
         private volatile bool sleeping;
         private volatile bool disposed;
-        private int bindAttempts;
         private int ticking;
         private int snapshotCounter;
 
@@ -206,7 +205,6 @@ namespace WigiPanel.Widget
                     var layout = LayoutLoader.Load(path);
                     next = new PanelRenderer(layout, Path.GetDirectoryName(path));
                     sensors.SetBindings(layout.Sensors);
-                    bindAttempts = 0;
                     layoutError = null;
                 }
                 catch (Exception ex)
@@ -294,12 +292,9 @@ namespace WigiPanel.Widget
 
         private void TickCore()
         {
-            // Re-resolve bindings: every tick for the first minute (HWiNFO sensors appear gradually
-            // after boot), then every 5 ticks, so transient sensors (PresentMon per-app framerate)
-            // are picked up and vanished ones are re-matched.
-            bindAttempts++;
-            if (bindAttempts <= 60 ? sensors.Unbound.Count > 0 : bindAttempts % 5 == 0)
-                sensors.TryBind();
+            // Re-resolve unmatched or silent bindings, with backoff: each sensor-list fetch makes
+            // WigiDash Manager permanently slower (see RescanSchedule).
+            sensors.MaybeRescan();
 
             Bitmap frame;
             lock (renderGate)

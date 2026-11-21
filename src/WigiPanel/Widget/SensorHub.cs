@@ -38,7 +38,15 @@ namespace WigiPanel.Widget
         private readonly List<SensorItem> monitored = new List<SensorItem>();
         private volatile Dictionary<string, SensorBinding> bindings = new Dictionary<string, SensorBinding>();
         private int lastSensorCount = -1;
+        // Guarded by bindGate. See RescanSchedule for why GetSensorList() must be called rarely.
+        private RescanSchedule rescan = new RescanSchedule(Environment.TickCount);
         private bool subscribed;
+
+        /// <summary>
+        /// A bound key whose sensors have all been silent this long counts as gone (the Manager
+        /// reports every monitored sensor every 500 ms while its reading is valid).
+        /// </summary>
+        private const int SilentMs = 30000;
         private volatile bool disposed;
 
         public SensorHub(IWidgetManager manager)
@@ -60,25 +68,49 @@ namespace WigiPanel.Widget
                 bindings = newBindings ?? new Dictionary<string, SensorBinding>();
                 lastSensorCount = -1;
                 BindCore();
+                rescan = new RescanSchedule(Environment.TickCount);
             }
         }
 
         /// <summary>
-        /// Matches still-unbound keys against the current sensor list. The Manager's list can be
-        /// incomplete for a while after start-up while HWiNFO initialises, so this is retried.
+        /// Re-matches bindings when some key is unbound (the Manager's list can be incomplete
+        /// while HWiNFO initialises) or has stopped reporting (its sensor may have vanished),
+        /// as often as <see cref="RescanSchedule"/> allows. Cheap when there is nothing to do.
         /// Never blocks: if another thread is binding, this attempt is skipped.
         /// </summary>
-        public void TryBind()
+        public void MaybeRescan()
         {
+            int now = Environment.TickCount;
+            bool needed = Unbound.Count > 0 || AnyKeySilent(now);
             if (!Monitor.TryEnter(bindGate)) return;
             try
             {
-                if (!disposed) BindCore();
+                if (disposed || !rescan.IsDue(now, needed)) return;
+                bool changed = BindCore();
+                rescan.Scanned(Environment.TickCount, changed);
             }
             finally
             {
                 Monitor.Exit(bindGate);
             }
+        }
+
+        private bool AnyKeySilent(int now)
+        {
+            foreach (var ids in itemsByKey.Values)
+            {
+                bool silent = true;
+                foreach (var id in ids)
+                {
+                    if (lastSeen.TryGetValue(id, out var seen) && unchecked(now - seen) <= SilentMs)
+                    {
+                        silent = false;
+                        break;
+                    }
+                }
+                if (silent && ids.Length > 0) return true;
+            }
+            return false;
         }
 
         public double? Get(string key)
@@ -107,12 +139,14 @@ namespace WigiPanel.Widget
             }
         }
 
-        private void BindCore()
+        /// <summary>Returns whether any binding now reads different sensors than before.</summary>
+        private bool BindCore()
         {
-            if (manager == null) return;
+            if (manager == null) return false;
             List<SensorItem> all;
             try { all = manager.GetSensorList() ?? new List<SensorItem>(); }
-            catch { return; }
+            catch { return false; }
+            var before = itemsByKey;
 
             // Re-dump when the set of sensor sources changes, not just the count
             // (switching foreground apps renames the PresentMon source without changing the count).
@@ -162,6 +196,8 @@ namespace WigiPanel.Widget
                     {
                         try { manager.AddMonitoringItem(item); monitored.Add(item); }
                         catch { /* keep the binding; values just won't arrive */ }
+                        // Start the silence clock at bind time (Get() also needs a value, so this shows nothing).
+                        lastSeen.TryAdd(id, Environment.TickCount);
                     }
                 }
                 byKey[kv.Key] = matches.Select(Identity).Distinct().ToArray();
@@ -176,6 +212,9 @@ namespace WigiPanel.Widget
                 manager.SensorUpdated += OnSensorUpdated;
                 subscribed = true;
             }
+
+            return byKey.Count != before.Count
+                || byKey.Any(kv => !before.TryGetValue(kv.Key, out var old) || !old.SequenceEqual(kv.Value));
         }
 
         private void OnSensorUpdated(SensorItem item, double value)
