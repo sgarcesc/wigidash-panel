@@ -1,0 +1,21 @@
+# Aqua Computer Octo section of a real WigiDash Manager 1.2.9760 sensor dump (HWiNFO 8.54).
+# The loop's water temperature probe is on Temperature 2.
+
+[Aqua Computer Octo]
+  Temperature 1  (C)    [type=1 id=17/0]
+  Temperature 2  (C)    [type=1 id=17/1]
+  Temperature 3  (C)    [type=1 id=17/2]
+  Temperature 4  (C)    [type=1 id=17/3]
+  Fan Voltage 1  (V)    [type=2 id=17/0]
+  Fan Voltage 2  (V)    [type=2 id=17/1]
+  Fan Voltage 3  (V)    [type=2 id=17/2]
+  Fan Voltage 4  (V)    [type=2 id=17/3]
+  Fan Voltage 5  (V)    [type=2 id=17/4]
+  Fan Power 1  (W)    [type=5 id=17/0]
+  Fan Power 2  (W)    [type=5 id=17/1]
+  Flow  (l/h)    [type=8 id=17/0]
+  Fan 1  (RPM)    [type=3 id=17/0]
+  Fan 2  (RPM)    [type=3 id=17/1]
+  Fan 3  (RPM)    [type=3 id=17/2]
+  Fan 4  (RPM)    [type=3 id=17/3]
+  Fan 5  (RPM)    [type=3 id=17/4]

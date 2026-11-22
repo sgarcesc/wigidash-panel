@@ -95,7 +95,7 @@
       "demo": 2750
     },
     "water": {
-      "name": "^Temperature 4$",
+      "name": "^Temperature 2$",
       "source": "Aqua Computer Octo",
       "demo": 31.2
     },
