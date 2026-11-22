@@ -56,6 +56,23 @@ namespace WigiPanel.Tests
             Assert.Equal("Temperature 2", hits[0].Name);
         }
 
+        [Theory]
+        // The original AIDA64 panel showed the pump (the Octo's Fan 4) from "Fan #23". AIDA numbers fans
+        // in one sequence, so the Octo's Fan n is AIDA's #(19 + n).
+        [InlineData("FFAN21", "Fan 2")]
+        [InlineData("FFAN23", "Fan 4")]
+        [InlineData("FFAN24", "Fan 5")]
+        [InlineData("FAIOPUMP", "Fan 4")]
+        public void Aida_fan_ids_follow_the_octo_numbering(string aidaId, string octoFan)
+        {
+            var sensors = SensorDump.Load("aqua-octo.txt");
+            var map = AidaSensorMap.Load(Path.Combine(RepoRoot(), "layouts", LayoutLoader.AidaMapFileName));
+            var hits = SensorMatcher.Select(map.Map[aidaId].Sensor, sensors, s => s.Name, s => s.Source, s => s.Unit);
+            Assert.True(hits.Count == 1, $"{aidaId} matched {hits.Count} sensors: {string.Join(", ", hits)}");
+            Assert.Equal("Aqua Computer Octo", hits[0].Source);
+            Assert.Equal(octoFan, hits[0].Name);
+        }
+
         private static string RepoRoot()
         {
             for (var dir = new DirectoryInfo(AppDomain.CurrentDomain.BaseDirectory); dir != null; dir = dir.Parent)
