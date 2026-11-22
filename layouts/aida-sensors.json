@@ -72,7 +72,8 @@
     "TMOBO":      { "sensor": { "name": "^Motherboard$", "unit": "C", "demo": 34 }, "format": "0" },
     // AIDA numbers Aqua Computer channels after the motherboard ones; edit if yours differ.
     "TTEMP1":     { "sensor": { "name": "^Temperature 1$", "source": "Aqua Computer Octo", "demo": 29 }, "format": "0" },
-    "TTEMP4":     { "sensor": { "name": "^Temperature 4$", "source": "Aqua Computer Octo", "demo": 29 }, "format": "0" },
+    // AIDA's Temperature #4 is the Octo's water probe, which HWiNFO calls Temperature 2.
+    "TTEMP4":     { "sensor": { "name": "^Temperature 2$", "source": "Aqua Computer Octo", "demo": 29 }, "format": "0" },
     "WFLOW1":     { "sensor": { "name": "^Flow$", "source": "Aqua Computer Octo", "demo": 93 }, "format": "0.00" },
     "FFAN21":     { "sensor": { "name": "^Fan 1$", "source": "Aqua Computer Octo", "demo": 800 }, "format": "0" },
     "FFAN23":     { "sensor": { "name": "^Fan 3$", "source": "Aqua Computer Octo", "demo": 800 }, "format": "0" },

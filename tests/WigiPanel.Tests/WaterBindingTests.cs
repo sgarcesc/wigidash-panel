@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using WigiPanel.Layout;
+using WigiPanel.Layout.Aida;
 using Xunit;
 
 namespace WigiPanel.Tests
@@ -40,6 +41,19 @@ namespace WigiPanel.Tests
             // Guards against silently checking nothing: the hand-written default and the generated designs.
             Assert.Contains("default.json", checkedFiles);
             Assert.True(checkedFiles.Count >= 9, "water bindings found in: " + string.Join(", ", checkedFiles));
+        }
+
+        [Fact]
+        public void Aida_water_id_reads_octo_temperature_2()
+        {
+            // The original AIDA64 panel showed water from "Temperature #4" (TTEMP4). AIDA numbers the
+            // Octo's channels after the motherboard's two, so its #4 is HWiNFO's Temperature 2.
+            var sensors = SensorDump.Load("aqua-octo.txt");
+            var map = AidaSensorMap.Load(Path.Combine(RepoRoot(), "layouts", LayoutLoader.AidaMapFileName));
+            var hits = SensorMatcher.Select(map.Map["TTEMP4"].Sensor, sensors, s => s.Name, s => s.Source, s => s.Unit);
+            Assert.True(hits.Count == 1, $"TTEMP4 matched {hits.Count} sensors: {string.Join(", ", hits)}");
+            Assert.Equal("Aqua Computer Octo", hits[0].Source);
+            Assert.Equal("Temperature 2", hits[0].Name);
         }
 
         private static string RepoRoot()
