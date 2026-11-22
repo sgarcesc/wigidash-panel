@@ -47,10 +47,10 @@
     "vramUsed":  { "name": "^GPU Memory Allocated$", "source": "^[di]?GPU \\[#0\\]", "scale": 0.0009765625, "demo": 6.8 },
     "vramFree":  { "name": "^GPU Memory Available$", "source": "^[di]?GPU \\[#0\\]", "scale": 0.0009765625, "demo": 25.2 },
 
-    // Cooling loop on the Aqua Computer Octo (AIDA used "Fan #23", "Flow #1", "Temperature #4").
+    // Cooling loop on the Aqua Computer Octo (AIDA used "Fan #23", "Flow #1"). The water probe is on Temperature 2.
     "pump":      { "name": "^Fan 4$", "source": "Aqua Computer Octo", "unit": "RPM", "demo": 2400 },
     "flow":      { "name": "^Flow$", "source": "Aqua Computer Octo", "demo": 142 },
-    "water":     { "name": "^Temperature 4$", "source": "Aqua Computer Octo", "unit": "C", "demo": 29.4 }
+    "water":     { "name": "^Temperature 2$", "source": "Aqua Computer Octo", "unit": "C", "demo": 29.4 }
   },
 
   "elements": [

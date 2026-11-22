@@ -49,7 +49,7 @@ $sensors = [ordered]@{
   vramLoad  = [ordered]@{ name = '^GPU Memory Usage$'; source = '^[di]?GPU \[#0\]'; unit = '%'; demo = 36 }
   fps       = [ordered]@{ name = '^Framerate Presented$'; source = '^PresentMon'; staleMs = 3000; demo = 144 }
   pump      = [ordered]@{ name = '^Fan 4$'; source = 'Aqua Computer Octo'; unit = 'RPM'; demo = 2750 }
-  water     = [ordered]@{ name = '^Temperature 4$'; source = 'Aqua Computer Octo'; demo = 31.2 }
+  water     = [ordered]@{ name = '^Temperature 2$'; source = 'Aqua Computer Octo'; demo = 31.2 }
   fan       = [ordered]@{ name = '^Fan 1$'; source = 'Aqua Computer Octo'; unit = 'RPM'; demo = 860 }
   flow      = [ordered]@{ name = '^Flow$'; source = 'Aqua Computer Octo'; demo = 94 }
   # HWiNFO reports KB/s (1024 bytes); x 8 x 1024 / 1e6 = Mbps
